@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="template">
+    <title>list hot job</title>
+    <creationDate>2014-06-06</creationDate>
+    <author>VFA</author>
+    <authorEmail>john@example.com</authorEmail>
+    <authorUrl>http://www.example.com</authorUrl>
+    <copyright>VFA</copyright>
+    <license>GNU/GPL</license>
+    <version>1.0.2</version>
+    <description> New Template Top Company</description>
+    <datas>
+        <company>
+            <files>/uploads/adv/logo1.jpg</files>
+            <name>LOTTE</name>
+            <slogan>Touching you, always</slogan>
+            <link>#</link>
+        </company>
+        <company>
+            <files>/uploads/adv/logo2.jpg</files>
+            <name>Canon</name>
+            <slogan>Delighting You Always</slogan>
+            <link>#</link>
+        </company>
+        <company>
+            <files>/uploads/adv/logo3.jpg </files>
+            <name>EVOLABLE ASIA</name>
+            <slogan>EVOLABLE ASIA</slogan>
+            <link>http://www.vietnamworks.com/employer/evolable-asia</link>
+        </company>
+        <company>
+            <files>/uploads/adv/logo4.jpg </files>
+            <name>H.I.S</name>
+            <slogan>H.I.S</slogan>
+            <link>#</link>
+        </company>
+        <company>
+            <files>/uploads/adv/logo5.jpg</files>
+            <name>Panasonic</name>
+            <slogan>People before products</slogan>
+            <link>http://www.vietnamworks.com/job-search/employer/panasonic-387276_741054_544254_3101113_3257590</link>
+        </company>
+        <company>
+            <files>/uploads/adv/logo6.jpg</files>
+            <name>HONDA</name>
+            <slogan>The power of Dreams</slogan>
+            <link>#</link>
+        </company>
+    </datas>
+</extension>
+

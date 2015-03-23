@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="template">
+    <title>Featured Employers</title>
+    <creationDate>2014-06-06</creationDate>
+    <author>VFA</author>
+    <authorEmail>john@example.com</authorEmail>
+    <authorUrl>http://www.example.com</authorUrl>
+    <copyright>VFA</copyright>
+    <license>GNU/GPL</license>
+    <version>1.0.2</version>
+    <description>New Template Featured Employers</description>
+    <datas>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/prudential_fe_88x43.png</files>
+            <name>Prudential</name>
+            <link>#</link>
+        </company>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/truyenthong.jpg </files>
+            <name>Toyota</name>
+            <link>#</link>
+        </company>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/logo_toyota.jpg</files>
+            <name>Panasonic</name>
+            <link>#</link>
+        </company>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/pvdrilling-88x43.gif</files>
+            <name>PV Drilling</name>
+            <link>#</link>
+        </company>
+         <company>
+            <files>http://images.vietnamworks.com/banner_logo/bat-vip.jpg</files>
+            <name>PV Drilling</name>
+            <link>#</link>
+        </company>
+         <company>
+            <files>http://images.vietnamworks.com/banner_logo/denso_fe_18042013.png</files>
+            <name>Jobs at Denso</name>
+            <link>#</link>
+        </company>
+         <company>
+            <files>http://images.vietnamworks.com/banner_logo/logo_language.jpg</files>
+            <name>Language Link</name>
+            <link>#</link>
+        </company>
+         <company>
+            <files>http://images.vietnamworks.com/banner_logo/vinhtuong.jpg</files>
+            <name>Vinh Tuong</name>
+            <link>#</link>
+        </company>
+          <company>
+            <files>http://images.vietnamworks.com/banner_logo/logo_vang.jpg</files>
+            <name>Vang Viet Nam</name>
+            <link>#</link>
+        </company>
+            <company>
+            <files>http://images.vietnamworks.com/banner_logo/daiviet.jpg</files>
+            <name>Cong Nghe Dai Viet</name>
+            <link>#</link>
+        </company>
+          <company>
+            <files>http://images.vietnamworks.com/banner_logo/logo_unilever_88x43.gif</files>
+            <name>Unilever Company</name>
+            <link>#</link>
+        </company>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/udic.jpg</files>
+            <name>Udic Kim Binh</name>
+            <link>#</link>
+        </company>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/aes_fe_88x43_2.jpg</files>
+            <name>AES</name>
+            <link>#</link>
+        </company>
+        <company>
+            <files>http://images.vietnamworks.com/banner_logo/toa_fe.png</files>
+            <name>TOA_FE</name>
+            <link>#</link>
+        </company>
+    </datas>
+</extension>
+

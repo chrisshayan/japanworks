@@ -1,0 +1,95 @@
+@media (max-width: 768px) {
+    .container {
+        margin-left:10px;
+        margin-right:10px;
+    }
+
+    #section2 .left_side {
+        padding-right:5px;
+    }
+
+    #section1 {
+        max-height:none;
+    }
+
+    #section1 .right_side  .ads div {
+        padding-bottom:0px!important;
+    }
+
+    #section1 .right_side  .welcome {
+        margin-bottom:0;
+    }
+
+    .name-block {
+        margin-top: 10px;
+        text-align: left;
+    }
+
+    .name-block img {
+        margin: 10px 0;
+    }
+
+    .event-section ul li a {
+        font-size: 20px;
+    }
+
+    .events-container .upcoming-event h2,
+    .events-container .past-event h2 {
+        font-size: 12px;
+    }
+
+    .tags-list .col .tag {
+        font-size: 11px;
+    }
+
+    .tags-list .col .item-multiplier {
+        font-size: 11px;
+    }
+
+    .qa-banner {
+        padding: 15px 20px;
+    }
+
+    .qa-banner .sum-info {
+        font-size: 14px;
+    }
+
+    .qa-banner .by-info {
+        width: 55%;
+        font-size: 11px;
+    }
+
+    .banner-title {
+        display: none;
+    }
+
+    #myCarousel.events .carousel-indicators {
+        bottom: -7px;
+    }
+
+    .event-section h3 a strong {
+        font-size: 20px;
+    }
+
+    .events-container .last-info .wrapper {
+        padding: 15px 10px;
+    }
+
+    .events-container .last-info .wrapper .btn-email-survey a {
+        font-size: 11px;
+    }
+    
+    .events-container .last-info .wrapper .btn-email-survey {
+        padding: 5px;
+    }
+}
+
+@media (max-width: 991px) {
+    #section1 {
+        max-height:277px;
+    }
+
+    .top-text-apply {
+        text-align:center!important;
+    }
+}

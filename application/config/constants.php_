@@ -1,0 +1,123 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+require(APPPATH . 'config/environment.php');
+/*
+  |--------------------------------------------------------------------------
+  | File and Directory Modes
+  |--------------------------------------------------------------------------
+  |
+  | These prefs are used when checking and setting modes when working
+  | with the file system.  The defaults are fine on servers with proper
+  | security, but you may wish (or even need) to change the values in
+  | certain environments (Apache running a separate process for each
+  | user, PHP under CGI with Apache suEXEC, etc.).  Octal values should
+  | always be used to set the mode correctly.
+  |
+ */
+define('FILE_READ_MODE', 0644);
+define('FILE_WRITE_MODE', 0666);
+define('DIR_READ_MODE', 0755);
+define('DIR_WRITE_MODE', 0777);
+
+/*
+  |--------------------------------------------------------------------------
+  | File Stream Modes
+  |--------------------------------------------------------------------------
+  |
+  | These modes are used when working with fopen()/popen()
+  |
+ */
+
+define('FOPEN_READ', 'rb');
+define('FOPEN_READ_WRITE', 'r+b');
+define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+define('FOPEN_WRITE_CREATE', 'ab');
+define('FOPEN_READ_WRITE_CREATE', 'a+b');
+define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+
+define("KEYWORD_DEDAULT", "JapanWorks");
+define("KEYWORD_HOME", "");
+
+define("TOOL_TIP", "Liên kết đến Vietnamworks (Japanworks là thành viên của Vietnamworks)");
+
+define("API_SEARCH", API_LINK . '/jobs/search');
+define("API_LOGIN", API_LINK . '/users/login');
+define("API_LOGOUT", API_LINK . '/users/logout');
+define("API_REGISTER", API_LINK . '/users/register');
+define("API_GENERAL_CONFIGURATION", API_LINK . '/general/configuration');
+define("API_JOB_DETAIL", API_LINK . '/jobs/view');
+//new version 2 10.12.2014
+define("API_ACCOUNT_STATUS", API_LINK . '/users/account-status/email');
+define("API_REQUEST_PASSWORD", API_LINK . '/users/request_password/user_email');
+define("API_CHECK_LOGIN", API_LINK . '/users/login');
+define("API_APPLY_ANOMYMOUS_ATTACH", API_LINK . '/jobs/applyAttach');
+//
+define("API_HEADER_CONTENT", 'CONTENT-MD5: 4c443c7e2c515d6b4b4d693c2f63434a7773226a614846733c4c4d4348');
+define("API_HEADER_TYPE", 'Content-Type: application/JSON');
+define("API_HEADER_ACCEPT", 'Content-Type: application/JSON');
+define("API_TIMEOUT", 36000);
+
+define("LANGUAGES", serialize(array(
+    "1" => array(
+        "lang_vn" => "Việt Nam",
+        "lang_en" => "Vietnamese"
+    ),
+    "2" => array(
+        "lang_vn" => "Tiếng Anh",
+        "lang_en" => "English"
+    ),
+    "3" => array(
+        "lang_vn" => "Bất kỳ",
+        "lang_en" => "Any"
+    )
+)));
+
+define("TIME_CACHE_SEARCH_DATA", 604800); // 7 days
+//mail setting
+//rakus config
+//define("LIST_MAIL_BBC", serialize(array("morio@vietnamworks.com", "ly.ho@vietnamworks.com", "koji@vietnamworks.com"))); // mail BBC for real
+define("LIST_MAIL_BBC", serialize(array("morio@vietnamworks.com"))); //mail BBC for dev
+define("LIST_MAIL_TO", serialize(array("longthailai@gmail.com", "vfa.cuongcl@gmail.com")));
+define("JOB_ID_RAKUS", 1); // job id of rakus company
+define("EMPLOYER_ID_RAKUS", 1); //  id of rakus company
+
+define("SUBJECT_FOR_RAKUS_COMPANY", '【応募】%sへの応募がありました（Rakus様特別求人ページ'); // subject when send mail for company
+define("SUBJECT_FOR_RAKUS_USER", 'Rakus Vietnam đã nhận được hồ sơ của '); // subject when send mail for user
+// Log setting
+define('ROOT_DIR', dirname(realpath(APPPATH)));
+define("LOG_DIR", ROOT_DIR . '/logs/');
+define("UPLOAD_DIR", ROOT_DIR . '/uploads/');
+define("LOG_NAME", 'logInfo');
+//file setting
+define("LIMIT_FILE_SIZE", '3072000'); // limit file upload
+define("FILE_UPLOAD_EXTENSIONS", serialize(array("doc", "pdf", "docx")));
+define("FILE_CHECK_TYPE_EXTENSIONS", serialize(array("text/plain", "text/html", "application/zip", "application/pdf", "application/msword", "application/rtf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")));
+
+//Mulodo config
+define("MULODO_JOB_ID", 3);
+define("LIST_MAIL_MULODO_TO", serialize(array("morio@vietnamworks.com")));
+define("LIST_MAIL_MULODO_BCC", serialize(array("yohmura@vitalify.jp")));
+//evolable
+define("JOB_ID_EVA", 4); //  id of evolable company
+define("LIST_MAIL_TO_EVA", serialize(array("morio@vietnamworks.com"))); //mail BBC for EVO
+define("LIST_MAIL_BBC_EVA", serialize(array("chunglieucuong@gmail.com", "longthailai@gmail.com"))); //mail BBC for dev
+define("SUBJECT_FOR_EVA_COMPANY", '【応募】Japanese BSEへの応募がありました（EVOLABLE ASIA様特別求人ページ）'); // subject when send mail for company
+define("SUBJECT_FOR_EVA_USER", 'EVOLABLE ASIA đã nhận được hồ sơ của '); // subject when send mail for user
+//mmax config
+define("JOB_ID_MMAX", 5); //  id of mmax company
+define("LIST_MAIL_TO_MMAX", serialize(array("morio@vietnamworks.com"))); //mail TO for mmax company
+define("LIST_MAIL_BBC_MMAX", serialize(array("vfa.cuongcl@gmail.com","longthailai@gmail.com","yohmura@vitalify.jp"))); //mail BBC for mmax company
+define("SUBJECT_FOR_MMAX_COMPANY", '【応募】%sへの応募がありました ( media max japan (vietnam) co. ltd., 様特別求人ページ )'); // subject when send mail for company
+define("SUBJECT_FOR_MMAX_USER", 'Media Max đã nhận được hồ sơ của '); // subject when send mail for user
+//evolable v2 config
+define("LIST_MAIL_TO_EVA_VER2", serialize(array("morio@vietnamworks.com"))); //mail TO for Evolable
+define("LIST_MAIL_BBC_EVA_VER2", serialize(array("vfa.cuongcl@gmail.com","longthailai@gmail.com","yohmura@vitalify.jp"))); //mail BBC for Evolable
+define("SUBJECT_FOR_EVA_VER2_COMPANY", '【応募】%sへの応募がありました ( EVOLABLE ASIA Co., Ltd 様特別求人ページ )'); // subject when send mail for company
+define("SUBJECT_FOR_EVA_VER2_USER", 'EVOLABLE ASIA Co., Ltd đã nhận được hồ sơ của '); // subject when send mail for user
+/* End of file constants.php */
+/* Location: ./application/config/constants.php */
