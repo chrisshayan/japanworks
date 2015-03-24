@@ -281,7 +281,23 @@ $jobApply = $job->job_url->vn;
 <script src="<?php echo base_url("static/js/jquery-2.1.1.min.js") ?>" ></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo base_url("static/js/bootstrap.min.js"); ?>"></script>
-
+<!-- heapanalytics -->
+<script type="text/javascript">
+                        window.heap = window.heap || [], heap.load = function (t, e) {
+                            window.heap.appid = t, window.heap.config = e;
+                            var a = document.createElement("script");
+                            a.type = "text/javascript", a.async = !0, a.src = ("https:" === document.location.protocol ? "https:" : "http:") + "//cdn.heapanalytics.com/js/heap-" + t + ".js";
+                            var n = document.getElementsByTagName("script")[0];
+                            n.parentNode.insertBefore(a, n);
+                            for (var o = function (t) {
+                                return function () {
+                                    heap.push([t].concat(Array.prototype.slice.call(arguments, 0)))
+                                }
+                            }, p = ["clearEventProperties", "identify", "setEventProperties", "track", "unsetEventProperty"], c = 0; c < p.length; c++)
+                                heap[p[c]] = o(p[c])
+                        };
+                        heap.load("1726761437");
+</script>
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>static/js/additional-methods.min.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
@@ -290,7 +306,7 @@ $jobApply = $job->job_url->vn;
 
                         //custom validation rule
                         $.validator.addMethod("customemail",
-                                function(value, element) {
+                                function (value, element) {
 
                                     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
                                 },
@@ -298,14 +314,14 @@ $jobApply = $job->job_url->vn;
                                 );
 
                         $.validator.addMethod("customephone",
-                                function(value, element) {
+                                function (value, element) {
                                     return /^[0-9().-]+$/.test(value);
                                 },
                                 "Vui lòng nhập số điện thoại."
                                 );
 
                         $.validator.addMethod("filesize",
-                                function(value, element) {
+                                function (value, element) {
 
                                     if ($(element).attr('type') == "file"
                                             && ($(element).hasClass('required')
@@ -399,7 +415,7 @@ $jobApply = $job->job_url->vn;
                             },
                             errorClass: "has-error-load",
                             errorElement: "span",
-                            errorPlacement: function(error, element) {
+                            errorPlacement: function (error, element) {
                                 element.parents("div.input-container").find(".has-error").append(error);
                             }
                         });
@@ -460,7 +476,7 @@ $jobApply = $job->job_url->vn;
                             fillPassword();
                         }
 
-                        $(document).ready(function() {
+                        $(document).ready(function () {
                             $('.check-option').val("false");
                             // when User go back agian
 
@@ -471,7 +487,7 @@ $jobApply = $job->job_url->vn;
                             //check email in vietnamwork when focus out email input
                             //check password when focus out password input
 
-                            $('#inputEmail').on('input', function() {
+                            $('#inputEmail').on('input', function () {
                                 checkEmailExistVNW();
                             });
                         });
@@ -483,13 +499,13 @@ $jobApply = $job->job_url->vn;
                                 $('#applyButton').attr('disabled', 'disabled');
 
                                 clearTimeout(passTimeout);
-                                passTimeout = setTimeout(function() {
+                                passTimeout = setTimeout(function () {
                                     $.ajax({
                                         url: "<?php echo base_url('/jobs/checkLogin'); ?>",
                                         type: 'POST',
                                         data: {'email': $("#inputEmail").val(), 'password': $("#inputPassword").val()},
                                         dataType: "json",
-                                        success: function(response) {
+                                        success: function (response) {
 
                                             if (response == true) { //if login is correct
                                                 $("#forgotPass").hide();
@@ -535,7 +551,7 @@ $jobApply = $job->job_url->vn;
                                 $('#applyButton').attr('disabled', 'disabled');
 
                                 clearTimeout(emailTimeout);
-                                emailTimeout = setTimeout(function() {
+                                emailTimeout = setTimeout(function () {
                                     def = $.Deferred();
                                     def.promise();
 
@@ -543,7 +559,7 @@ $jobApply = $job->job_url->vn;
                                         url: "<?php echo base_url('/jobs/checkEmailExist'); ?>",
                                         type: 'POST', data: {'email': $("#inputEmail").val()},
                                         dataType: "json",
-                                        success: function(response) {
+                                        success: function (response) {
                                             //show form password
                                             $("#loadData").show();
                                             if (response == "ACTIVATED") {
@@ -596,7 +612,7 @@ $jobApply = $job->job_url->vn;
                                 url: "<?php echo base_url('/jobs/resendPassword'); ?>",
                                 type: 'POST', data: {'email': $("#inputEmail").val()},
                                 dataType: "json",
-                                success: function(response) {
+                                success: function (response) {
                                     if (response == true) {
                                         $('#myButtonForgot').trigger('click');
                                     } else {
@@ -615,7 +631,7 @@ $jobApply = $job->job_url->vn;
                                     type: 'POST',
                                     data: {'email': $("#inputEmail").val(), 'password': $("#inputPassword").val()},
                                     dataType: "json",
-                                    success: function(response) {
+                                    success: function (response) {
                                         if (response == true) {
                                             $("#forgotPass").hide();
                                             $("#checkPassword").val(1);
@@ -642,7 +658,7 @@ $jobApply = $job->job_url->vn;
                             e.preventDefault();
                             if (typeof (def) != "undefined") {
                                 console.log($("#checkActiveEmail").val());
-                                def.done(function(result) {
+                                def.done(function (result) {
                                     var activeEmail = $("#checkActiveEmail").val();
                                     console.log(activeEmail + " done");
                                     if (((activeEmail == 1 && $("#checkPassword").val() == 1) || activeEmail != 1) && $("#frmSignUp").valid() == true) {
@@ -663,7 +679,7 @@ $jobApply = $job->job_url->vn;
                         //---------------------------------------------------------------------//
                         function scrollToAnchor(aid) {
                             var aTag = $("a[name='" + aid + "']");
-                            $('html,body').animate({scrollTop: aTag.offset().top}, 'slow', function() {
+                            $('html,body').animate({scrollTop: aTag.offset().top}, 'slow', function () {
                                 $("#topApply").hide();
                             });
                         }
@@ -700,8 +716,8 @@ $jobApply = $job->job_url->vn;
                         }
 
 
-                        $(function() {
-                            $(window).scroll(function() {
+                        $(function () {
+                            $(window).scroll(function () {
                                 showTopApply();
                             });
                         });
