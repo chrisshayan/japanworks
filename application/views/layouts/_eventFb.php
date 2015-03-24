@@ -16,7 +16,7 @@
 
                 <li>
                     <p class = "info"><span class = "glyphicon glyphicon-calendar"></span> <?php echo str_replace("-", "tháng", $date->format('d - m, Y')); ?></p>
-                    <a onclick="ga('send', 'event', 'link', 'click', 'hometoFB', 1);" href="<?php echo 'https://www.facebook.com/events/' . $event->id; ?>" target = "_blank"><strong><?php echo $event->name; ?></strong></a>
+                    <a onclick="ga('send', 'event', 'link', 'click', 'hometoFB', '<?php echo $event->id; ?>');" href="<?php echo 'https://www.facebook.com/events/' . $event->id; ?>" target = "_blank"><strong><?php echo $event->name; ?></strong></a>
                 </li>
             <?php } ?>
         </ul>

@@ -88,7 +88,7 @@
                                     <span class = "glyphicon glyphicon-time"></span> <?php echo $date->format('h:i a');
                                         ?><br>
                                     <button type="button" class="btn btn-default join-in-fb" aria-label="Left Align">
-                                        <a target="_blank" onclick="ga('send', 'event', 'link', 'click', 'eventtoFB', 1);" href="<?php echo 'https://www.facebook.com/events/' . $event->id; ?>"><strong>Join in Facebook</strong></a>
+                                        <a target="_blank" onclick="ga('send', 'event', 'link', 'click', 'eventtoFB', '<?php echo $event->id; ?>');" href="<?php echo 'https://www.facebook.com/events/' . $event->id; ?>"><strong>Join in Facebook</strong></a>
                                     </button>
                                 </div>
                             </li>
