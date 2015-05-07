@@ -22,15 +22,22 @@
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="<?php echo base_url("static/css/bootstrap.min.css"); ?>">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_grid.css"); ?>">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/default.css?240720141702"); ?>">
+
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/search.css?201406161725"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/default.css?201406241331"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom.css"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_grid.css?2014241300"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("static/css/jquery.fancybox.css?v=2.1.5"); ?>" type="text/css" media="screen" />
         <!-- Important Owl stylesheet -->
         <link rel="stylesheet" href="<?php echo base_url("static/css/owl.carousel.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("static/css/owl.theme.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/font-awesome.min.css") ?>">
         <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.11.1.min.js"></script>
+        <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
+
+
+
+
 
         <?php if (ENVIRONMENT_REAL) { ?>
             <script>
@@ -74,7 +81,7 @@
     <body id="">
         <div id="wrapper">
             <!--footer-->
-            <?php echo render_partial('/headerNoRegister'); ?>
+            <?php echo render_partial('/header'); ?>
             <!--End footer-->
             <?php
             if ($this->_showHomeIntro) {

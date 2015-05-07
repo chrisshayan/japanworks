@@ -30,7 +30,10 @@ define('DIR_WRITE_MODE', 0777);
   | These modes are used when working with fopen()/popen()
   |
  */
-
+/* ----login with fb--- */
+define('SET_APPID_FB', '103048186693870');
+define('SET_APPSECRET_FB', '2f95683c845d37b4b314a62e4c239426');
+/* ----end login with fb--- */
 define('FOPEN_READ', 'rb');
 define('FOPEN_READ_WRITE', 'r+b');
 define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
@@ -42,8 +45,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
 define("KEYWORD_DEDAULT", "JapanWorks");
 define("KEYWORD_EDUCATION", "japanesebeginner");
+define("KEYWORD_WORKINJAPAN", "workinjapan");
+define("KEYWORD_JAPANESECLASS", "japaneseclass");
+define("KEYWORD_OVER1000", "overthousand");
 define("KEYWORD_HOME", "");
-
 define("TOOL_TIP", "Liên kết đến Vietnamworks (Japanworks là thành viên của Vietnamworks)");
 
 define("API_SEARCH", API_LINK . '/jobs/search');
@@ -63,7 +68,7 @@ define("API_TAGS_LIST", 'http://api.stackexchange.com/2.2/tags?page=%s&pagesize=
 define("API_GET_TAGS_FROM_SEARCH", 'http://api.stackexchange.com/2.2/tags?page=1&pagesize=20&order=desc&sort=activity%s&site=japanese&filter=!bCzphIT--x6c8A');
 define("API_TAGS_RELATED", 'http://api.stackexchange.com/2.2/tags/%s/related?page=1&pagesize=5&site=japanese&filter=!*MM6iJi4t1uBt(nY');
 
-define("KEY_QA", '&key=PBBTm9s)wKdrjIBH59SQ)g(('); //'&key=Gaa2PRVMNpfNXRJ3y3Jufw(('
+define("KEY_QA", '&key=PBBTm9s)wKdrjIBH59SQ)g((');//'&key=Gaa2PRVMNpfNXRJ3y3Jufw((');
 define("KEY_QA_REAL", '&key=PBBTm9s)wKdrjIBH59SQ)g((');
 //API for event fb
 //page link: https://www.facebook.com/JapanWorksFanpage
@@ -84,8 +89,12 @@ define("API_ACCOUNT_STATUS", API_LINK . '/users/account-status/email');
 define("API_REQUEST_PASSWORD", API_LINK . '/users/request_password/user_email');
 define("API_CHECK_LOGIN", API_LINK . '/users/login');
 define("API_APPLY_ANOMYMOUS_ATTACH", API_LINK . '/jobs/applyAttach');
+//Cuong.Chung
+//31.03.2015
+define("API_JOB_ALERT", API_LINK . '/users/create-jobalert');
 //
-define("API_HEADER_CONTENT", 'CONTENT-MD5: 4c443c7e2c515d6b4b4d693c2f63434a7773226a614846733c4c4d4348');
+//
+define("API_HEADER_CONTENT", 'CONTENT-MD5: 8982065e30ea02cf02e93a83824cf65b7de1e69545ce8bed4f2bb3c98a862b70');
 define("API_HEADER_TYPE", 'Content-Type: application/JSON');
 define("API_HEADER_ACCEPT", 'Content-Type: application/JSON');
 define("API_TIMEOUT", 36000);
@@ -107,31 +116,34 @@ define("LANGUAGES", serialize(array(
 
 define("TIME_CACHE_SEARCH_DATA", 604800); // 7 days
 //mail setting
+//Rakus setting
 define("LIST_MAIL_BBC", serialize(array("morio@vietnamworks.com", "ly.ho@vietnamworks.com", "koji@vietnamworks.com"))); // mail BBC for real
+define("LIST_MAIL_TO", serialize(array("longthailai@gmail.com", "vfa.cuongcl@gmail.com"))); // mail BBC for real
 //define("LIST_MAIL_BBC", serialize(array("chunglieucuong@gmail.com", "yohmura@vitalify.jp", "morio@vietnamworks.com"))); //mail BBC for dev
-define("LIST_MAIL_TO", serialize(array("info@rakus.com.vn")));
 define("JOB_ID_RAKUS", 1); // job id of rakus company
 define("EMPLOYER_ID_RAKUS", 1); //  id of rakus company
-
 define("SUBJECT_FOR_RAKUS_COMPANY", '【応募】%sへの応募がありました（Rakus様特別求人ページ'); // subject when send mail for company
 define("SUBJECT_FOR_RAKUS_USER", 'Rakus Vietnam đã nhận được hồ sơ của '); // subject when send mail for user
 // Log setting
 define('ROOT_DIR', dirname(realpath(APPPATH)));
-define("LOG_DIR", ROOT_DIR.'/logs/');
-define("UPLOAD_DIR", ROOT_DIR.'/uploads/');
+define("LOG_DIR", ROOT_DIR . '/logs/');
+define("UPLOAD_DIR", ROOT_DIR . '/uploads/');
 define("LOG_NAME", 'logInfo');
 define("LOG_NAME_CSV", 'logCSV');
 define("DISABLE_LOG_CSV", TRUE);
 //file setting
+define("UPLOAD_IMAGE_DIR", ROOT_DIR . '/uploads-image/');
+define("FILE_UPLOAD_IMAGE_EXTENSIONS", serialize(array("jpg", "png", "jpeg", "gif")));
 define("LIMIT_FILE_SIZE", '3072000'); // limit file upload
 define("LIMIT_FILE_SIZE_FOR_JOBS", '524288'); // limit file upload
+
 define("FILE_UPLOAD_EXTENSIONS", serialize(array("doc", "pdf", "docx")));
 define("FILE_CHECK_TYPE_EXTENSIONS", serialize(array("text/plain", "text/html", "application/zip", "application/pdf", "application/msword", "application/rtf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")));
 
 //Mulodo config
 define("MULODO_JOB_ID", 3);
 define("LIST_MAIL_MULODO_TO", serialize(array("shimoura@mulodo.com", "le.diep@mulodo.com", "duong.quynh@mulodo.com", "lam.dung@mulodo.com")));
-define("LIST_MAIL_MULODO_BCC", serialize(array("morio@vietnamworks.com", "tu.phan@vietnamworks.com", "koji@vietnamworks.com", "chau.tran@vietnamworks.com", "ngoc.tran@vietnamworks.com")));
+define("LIST_MAIL_MULODO_BCC", serialize(array("morio@vietnamworks.com", "tu.phan@vietnamworks.com", "koji@vietnamworks.com", "chau.tran@vietnamworks.com")));
 //evolable config
 define("JOB_ID_EVA", 4); //  id of evolable company
 define("LIST_MAIL_TO_EVA", serialize(array("jobs@evolable.asia"))); //mail TO for Evolable
@@ -140,25 +152,25 @@ define("SUBJECT_FOR_EVA_COMPANY", '【応募】Japanese BSEへの応募があり
 define("SUBJECT_FOR_EVA_USER", 'EVOLABLE ASIA đã nhận được hồ sơ của '); // subject when send mail for user
 //mmax config
 define("JOB_ID_MMAX", 5); //  id of mmax company
-define("LIST_MAIL_TO_MMAX", serialize(array("hanoi@mmj.ne.jp"))); //mail TO for mmax company
-define("LIST_MAIL_BBC_MMAX", serialize(array("tu.vu@vietnamworks.com", "morio@vietnamworks.com","tu.phan@vietnamworks.com"))); //mail BBC for mmax company
+define("LIST_MAIL_TO_MMAX", serialize(array("yohmura@vitalify.jp"))); //mail TO for mmax company
+define("LIST_MAIL_BBC_MMAX", serialize(array("lieucuong2505@gmail.com", "longthailai@gmail.com"))); //mail BBC for mmax company
 define("SUBJECT_FOR_MMAX_COMPANY", '【応募】%sへの応募がありました ( media max japan (vietnam) co. ltd., 様特別求人ページ )'); // subject when send mail for company
 define("SUBJECT_FOR_MMAX_USER", 'Media Max đã nhận được hồ sơ của '); // subject when send mail for user
 //evolable v2 config
-define("LIST_MAIL_TO_EVA_VER2", serialize(array("jobs@evolable.asia"))); //mail TO for Evolable
-define("LIST_MAIL_BBC_EVA_VER2", serialize(array("ly.ho@vietnamworks.com", "morio@vietnamworks.com", "koji@vietnamworks.com", "tu.phan@vietnamworks.com"))); //mail BBC for Evolable
+define("LIST_MAIL_TO_EVA_VER2", serialize(array("vfa.cuongcl@gmail.com"))); //mail TO for Evolable
+define("LIST_MAIL_BBC_EVA_VER2", serialize(array("vfa.cuongcl@gmail.com"))); //mail BBC for Evolable
 define("SUBJECT_FOR_EVA_VER2_COMPANY", '【応募】%sへの応募がありました ( EVOLABLE ASIA Co., Ltd 様特別求人ページ )'); // subject when send mail for company
 define("SUBJECT_FOR_EVA_VER2_USER", 'EVOLABLE ASIA Co., Ltd đã nhận được hồ sơ của '); // subject when send mail for user
+
 //vitalify config
 define("JOB_ID_VF", 6); //  id of vitalify company
 define("LIST_MAIL_TO_VF", serialize(array("ytsuchiya@vitalify.jp"))); //mail TO for vitalify company
-define("LIST_MAIL_BBC_VF", serialize(array("kawakatsu@vitalify.jp","suongntn@vitalify.asia","hangltd@vitalify.asia","kitaba@vitalify.jp","morio@vietnamworks.com", "my.vo@vietnamworks.com"))); //mail BBC for vitalify company
+define("LIST_MAIL_BBC_VF", serialize(array("vfa.cuongcl@gmail.com","longthailai@gmail.com","morio@vietnamworks.com", "my.vo@vietnamworks.com"))); //mail BBC for vitalify company
 define("SUBJECT_FOR_VF_COMPANY", '【応募】%sへの応募がありました ( Vitalify co. ltd., 様特別求人ページ )'); // subject when send mail for company
 define("SUBJECT_FOR_VF_USER", 'Vitalify đã nhận được hồ sơ của '); // subject when send mail for user
-
 //xalo config
-define("LIST_MAIL_TO_XALO", serialize(array("morio@vietnamworks.com"))); //mail TO for vitalify company
-define("LIST_MAIL_BBC_XALO", serialize(array(""))); //mail BBC for vitalify company
+define("LIST_MAIL_TO_XALO", serialize(array("vfa.cuongcl@gmail.com"))); //mail TO for xalo company
+define("LIST_MAIL_BBC_XALO", serialize(array("vfa.cuongcl@gmail.com"))); //mail BBC for xalo company
 define("SUBJECT_FOR_XALO_COMPANY", 'Get discount from Xalolead'); // subject when send mail for company
 define("SUBJECT_FOR_XALO_USER", 'Xalo đã nhận được hồ sơ của '); // subject when send mail for user
 /* End of file constants.php */

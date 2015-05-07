@@ -228,7 +228,7 @@
                     <div class="panel panel-default" id="form-apply">
                         <div class="panel-body">
                             <h3>Apply now! (takes only 30 seconds)</h3>
-                            <form id="frmSignUp" class="form-horizontal" role="form" action="" method="post"  novalidate="novalidate" enctype="multipart/form-data">
+                            <form id="frmSignUp" class="form-horizontal" role="form" action="" method="post" novalidate="novalidate" enctype="multipart/form-data">
                                 <div class="form-group ">
                                     <label for="inputFirstName" class="col-sm-2 control-label">Name</label>
                                     <div class="col-sm-5 input-container">
@@ -248,7 +248,7 @@
                                 <div class="form-group ">
                                     <label for="inputEmail" class="col-sm-2 control-label">Email</label>
                                     <div class="col-sm-10 input-container">
-                                        <input type="text" rel="requiredField" class="form-control" hatid="inputEmail" name="inputEmail" placeholder="Your  email"
+                                        <input type="text" rel="requiredField" class="form-control" id="inputEmail" name="inputEmail" placeholder="Your  email"
                                                value="<?php echo set_value('inputEmail'); ?>">
                                         <div class="has-error"><?php echo form_error('inputEmail'); ?></div>
                                     </div>

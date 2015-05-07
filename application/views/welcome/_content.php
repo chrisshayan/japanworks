@@ -1,5 +1,9 @@
+
+
+
 <div class = "panel-heading">
-    <div class = "panel-title"><h2> <span class = "glyphicon glyphicon-thumbs-up"></span> <?php echo $this->_contentTitle; ?> <a href="http://vietnamworks.com" class="pull-right titleLinkR">Vietnamworks &gt;</a></h2> </div>
+
+    <div class = "panel-title"><h2> <span class = "glyphicon glyphicon-thumbs-up"></span> <?php echo $this->_contentTitle; ?> </h2> </div>
 </div>
 <div class = "panel-body" id="results">
     <?php

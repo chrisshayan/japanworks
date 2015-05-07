@@ -19,6 +19,7 @@ class MY_Controller extends CI_Controller {
     public $_langdb = "lang_en";
     public $_contentTitle = "";
     //header
+    public $_imageLink = "";
     public $_pageTitle = "";
     public $_metaKeys = "";
     public $_metaData = "";

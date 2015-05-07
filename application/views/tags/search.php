@@ -44,7 +44,7 @@
                         </row>
                     </div>
                     <div class="pagination-block" align="center">
-                        <p>Hiển thị: <strong><?php echo $valueShowRecord; ?></strong> trong số <strong><?php echo $listTags->total; ?></strong> câu hỏi.</p>
+                        <p>Hiển thị: <strong><?php echo $valueShowRecord; ?></strong> trong số <strong><?php echo $listTags->total; ?></strong> từ khóa.</p>
                         <ul class="pagination">
                             <?php echo $this->pagination->create_links(); ?>
                         </ul>

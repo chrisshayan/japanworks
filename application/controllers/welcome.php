@@ -7,6 +7,11 @@ class Welcome extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->config->load('linkedin');
+
+        $this->data['consumer_key'] = $this->config->item('api_key');
+        $this->data['consumer_secret'] = $this->config->item('secret_key');
+        $this->data['callback_url'] = site_url() . '/user/linkedin_submit';
     }
 
     /**
@@ -34,6 +39,7 @@ class Welcome extends MY_Controller {
         //do when submit search criteria
         if ($params = $this->input->post()) {
             $keyword = @$this->input->post("job_title");
+
             $categories = @$this->input->post("job_category");
             $locations = @$this->input->post("job_location");
             $level = @$this->input->post("job_level");
@@ -44,6 +50,8 @@ class Welcome extends MY_Controller {
                 $search->job_category = $categories;
             if ($locations)
                 $search->job_location = $locations;
+
+
             $search->job_level = $level;
 
             $this->session->set_userdata("VNW_SEARCH_DETAIL", $search);
@@ -74,17 +82,23 @@ class Welcome extends MY_Controller {
             $this->ocular->set_view_data("resultsSearchJob", array());
         }
         //get information from StackExchange API
-        $qaTop = getCurl(API_QA_TOP . KEY_QA. '&ran=1');
+
+        $qaTop = array();  //   $qaTop = getCurl(API_QA_TOP . KEY_QA);
         $this->ocular->set_view_data("qaTop", $qaTop);
-        //end get information from StackExchange API
-        //
+        //--end get information from StackExchange API
+        //icon of benefit
+        $benefitIcon = array('', 'fa-dollar', 'fa-user-md', 'fa-file-image-o', 'fa-graduation-cap', 'fa-trophy',
+            'fa-book', 'fa-laptop', 'fa-mobile', 'fa-plane', 'fa-glass',
+            'fa-cab', 'fa-coffee', 'fa-gift', 'fa-child', 'fa-check-square-o');
+        $this->ocular->set_view_data("benefitIcon", $benefitIcon);
+        //--end icon of benefit
         //load hot jobs
         $fileJson = 'static/json/category.json';
         $strData = file_get_contents($fileJson);
         $datas = json_decode($strData, true);
         $categories = $datas["data"];
         sortByColumn($categories, 'total', SORT_DESC);
-
+        //--end load hot jobs
         //load statistic job
         $jobStatistic['total'] = @$resultsSearchJob->data->total;
         $file = FCPATH . "static/json/jobOfWeek.txt";
@@ -112,8 +126,30 @@ class Welcome extends MY_Controller {
 
         $this->ocular->set_view_data("listEvent", $listEvent);
 
+        //facebook
+        // Get User ID
+        $this->load->helper('url');
+        // $this->load->library('facebook'); // Automatically picks appId and secret from config
+        // OR
+        // You can pass different one like this
 
-        $this->ocular->render();
+        $this->load->library('facebook', array(
+            'appId' => SET_APPID_FB,
+            'secret' => SET_APPSECRET_FB,
+        ));
+        $user = $this->facebook->getUser();
+        $loginFbUrl = $this->facebook->getLoginUrl(array('redirect_uri' => site_url('social/facebookSubmit'),
+            'scope' => array("email") // permissions here
+        ));
+        $this->ocular->set_view_data("loginFbUrl", $loginFbUrl);
+        //end facebook
+        //Get google
+        $this->load->library('googleplus');
+        $this->_gp_client = $this->googleplus->client;
+        $loginGpUrl = $this->_gp_client->createAuthUrl();
+        $this->ocular->set_view_data("loginGpUrl", $loginGpUrl);
+        //end google
+        $this->ocular->render('applicationNew');
     }
 
     public function callData($num) {

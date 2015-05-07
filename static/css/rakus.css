@@ -255,3 +255,13 @@ img.box {
 a.cv_link {color:#09F; text-decoration:underline; font-weight:bold;}
 
 .follow_bar_applylink {font-size:24px; color:#555}
+
+.thanku_title {
+font-size: 36px;
+color: #94cd17;
+font-weight: bold;
+text-align: center;
+background: url(../img/thankyou_banner.jpg) no-repeat center;
+padding: 150px 0;
+}
+.text-note{font-size: 18px;}

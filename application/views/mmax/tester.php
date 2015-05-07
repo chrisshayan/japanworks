@@ -402,20 +402,20 @@
                                     //custom validation rule
 
                                     $.validator.addMethod("customemail",
-                                            function(value, element) {
+                                            function (value, element) {
                                                 return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
                                             },
                                             "<?php echo "Please enter your email." ?>"
                                             );
                                     $.validator.addMethod("customephone",
-                                            function(value, element) {
+                                            function (value, element) {
                                                 return /^[0-9().-]+$/.test(value);
                                             },
                                             "<?php echo "Please enter your phone number." ?>"
                                             );
                                     $.validator.addMethod(
                                             "filesize",
-                                            function(value, element) {
+                                            function (value, element) {
 
                                                 if ($(element).attr('type') == "file"
                                                         && ($(element).hasClass('required')
@@ -492,12 +492,12 @@
                                         },
                                         errorClass: "has-error",
                                         errorElement: "span",
-                                        errorPlacement: function(error, element) {
+                                        errorPlacement: function (error, element) {
                                             element.parents("div.input-container").find(".has-error").append(error);
                                         }
 
                                     });
-                                    $(document).ready(function() {
+                                    $(document).ready(function () {
 
                                     });</script>
 
@@ -509,7 +509,7 @@
                 {
 
                     $('#applyButton').prop('disabled', true);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('#applyButton').prop('disabled', false);
                     }, 2000);
                     return true;
@@ -548,16 +548,16 @@
             }
 
 
-            $(function() {
+            $(function () {
 
-                $(window).scroll(function() {
+                $(window).scroll(function () {
                     showTopApply();
                 });
 
             });
             function scrollToAnchor(aid) {
                 var aTag = $("a[name='" + aid + "']");
-                $('html,body').animate({scrollTop: aTag.offset().top}, 'slow', function() {
+                $('html,body').animate({scrollTop: aTag.offset().top}, 'slow', function () {
                     $("#topApply").hide();
                 });
             }

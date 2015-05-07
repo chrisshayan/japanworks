@@ -7,6 +7,7 @@ $jobApply = $job->job_url->vn;
   }
  */
 ?>
+
 <!-- Job details -->
 <div class="panel">
     <div class="panel-heading"><h2><span class="glyphicon glyphicon-briefcase"></span> <?php echo $this->lang->line("job_detail") ?></h2></div>
@@ -33,7 +34,40 @@ $jobApply = $job->job_url->vn;
                 <!--div class="fs12" align="center">(Mẫu nộp đơn phía dưới đây)</div> -->
             </div>
         </div>
+        <!-- Skills -->
 
+
+        <?php if (isset($job->job_detail->skills) && count($job->job_detail->skills) > 0) : ?>
+            <div class="row skills">
+                <?php $i = 0; ?>
+                <?php foreach ($job->job_detail->skills as $skill) { ?>
+                    <a href="<?php echo site_url() . "kw/" . str2alias($skill->skillName, false); ?>" style="color:#555">
+                        <span class="tag-skill">
+                            <?php echo $skill->skillName; ?>
+                        </span>
+                    </a>
+                    <?php
+                }
+                ?>
+            </div>
+        <?php endif; ?>
+        <!-- Benefits -->
+
+
+
+        <?php if (isset($job->job_summary->benefits) && count($job->job_summary->benefits) > 0) : ?>
+            <div class="row benefits">
+                <h3>Phúc lợi</h3>
+                <ul>
+                    <?php foreach ($job->job_summary->benefits as $benefit) { ?>
+                        <li>
+                            <span class="fa fa-fw <?php echo $benefitIcon[$benefit->benefitId]; ?>"></span>&nbsp;<?php echo $benefit->benefitValue; ?>
+                        </li>
+
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php endif; ?>
         <div>
             <p itemprop="description">
                 <strong class="fs18"><?php echo $this->lang->line("job_description"); ?></strong><br>
@@ -85,22 +119,46 @@ $jobApply = $job->job_url->vn;
                 <label for="inputFirstName" class="col-sm-2 control-label">*Họ Tên</label>
                 <div class="col-sm-5 input-container">
                     <input type="text" rel="requiredField" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="Họ"
-                           value="">
+                           value="<?php
+                           if (($this->session->userdata('userInfo'))) {
+
+                               $user = $this->session->userdata('userInfo');
+                               echo $user->profile->last_name;
+                           }
+                           ?>">
                     <div class="has-error"></div>
                 </div>
                 <div class="col-sm-5 input-container">
                     <input type="text"  rel="requiredField" class="form-control" id="inputLastName" name="inputLastName" placeholder="Tên"
-                           value="">
+                           value="<?php
+                           if (($this->session->userdata('userInfo'))) {
+
+                               $user = $this->session->userdata('userInfo');
+                               echo $user->profile->first_name;
+                           }
+                           ?>">
                     <div class="has-error"></div>
                 </div>
 
             </div>
+
             <div class="form-group ">
 
                 <label for="inputEmail" class="col-sm-2 control-label">*E-mail</label>
                 <div class="col-sm-5 input-container">
-                    <input type="text" rel="requiredField" class="form-control" onkeyup="checkEmailExistVNW()" id="inputEmail" name="inputEmail" placeholder="E-mail"
-                           value="">
+                    <?php
+                    if (($this->session->userdata('userInfo'))) {
+
+                        $user = $this->session->userdata('userInfo');
+                        ?>
+                        <input type = "text" rel = "requiredField" class = "form-control" onkeyup = "checkEmailExistVNW()" id = "inputEmail" name = "inputEmail" placeholder = "E-mail" value = "<?php echo $user->profile->email; ?>" disabled = "true">
+                    <?php } else {
+                        ?>
+                        <input type="text" rel="requiredField" class="form-control" onkeyup="checkEmailExistVNW()" id="inputEmail" name="inputEmail" placeholder="E-mail"
+                               value="">
+
+                    <?php } ?>
+
                     <div class="has-error"></div>
                 </div>
                 <!--                    <div class="col-sm-5 input-container">
@@ -135,14 +193,55 @@ $jobApply = $job->job_url->vn;
 
             <div class="form-group " id="attachCV" style="<?php if (isset($checkOption) && $checkOption == "true") echo "display:none"; ?>">
                 <label for="inputResume" class="col-sm-2 control-label">*Đính kèm CV</label>
+
                 <div class="col-sm-10 input-container">
-                    <input type="hidden" name="maxFileSize" value="<?php echo LIMIT_FILE_SIZE_FOR_JOBS; ?>" />
-                    <input type="file" class="left" rel="requiredField" id="inputFile" name="inputFile"  placeholder="Your resume" />
+
+                    <?php if (($this->session->userdata('userInfo'))) { //user login  ?>
+                        <div class="radio saved-resume">
+                            <label>
+                                <div class="col-sm-3">
+                                    <input class="editable" tabindex="5" type="radio" name="resumeApply" id="optionsRadios1" value="currentResume"> Dùng hồ sơ cũ
+                                </div>
+                                <div class="col-sm-9 preview-cv" style="display:none">
+                                    <?php if (isset($dataCV['nameresume'])) { ?>
+                                        <input type="hidden" name="checkOldCV" id="checkOldCV" value="true" />
+                                        <span class="ok glyphicon glyphicon-ok"></span>
+                                        <span class="resume-name" ><?php echo (isset($dataCV['nameresume'])) ? $dataCV['nameresume'] : "Bạn chưa có hồ sơ" ?></span>
+                                    <?php } else { ?>
+                                        <input type="hidden" name="checkOldCV" id="checkOldCV" value="false" />
+                                        <span class="no-resume-warning">Không có hồ sơ của bạn tại JapanWork, vui lòng tải một hồ sơ mới.</span>
+                                    <?php } ?>
+
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="radio">
+                            <label>
+                                <div class="col-sm-3">
+                                    <input class="editable" tabindex="7" type="radio" name="resumeApply" id="optionsRadios2" value="newAttachment" checked> Tải hồ sơ mới
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="maxFileSize" value="<?php echo LIMIT_FILE_SIZE_FOR_JOBS; ?>" />
+                                    <span class="upload-button">
+                                        <input class="editable left" type="file" name="inputFile" id="inputFile" value="Đính kèm hồ sơ" tabindex="8" rel="requiredField" placeholder="Your resume">
+                                        <span class="small">(định dạng .doc, .docx, .pdf nhỏ hơn 512KB)</span>
+                                    </span>
+                                    <div class="has-error"></div>
+                                </div>
+
+                            </label>
+                        </div>
+                    <?php } else { ?>
+                        <input type="hidden" name="maxFileSize" value="<?php echo LIMIT_FILE_SIZE_FOR_JOBS; ?>" />
+                        <input type="file" class="left" rel="requiredField" id="inputFile" name="inputFile"  placeholder="Your resume" />
 
 
-                    <span class="small">(định dạng .doc, .docx, .pdf nhỏ hơn 512KB)</span>
-                    <div class="has-error"></div>
-<!--                        <div class="mt20"><a href="javascript:toggleCVform(1)" class="cv_link" ><strong>Don't have a CV ?</strong></a></div>-->
+                        <span class="small">(định dạng .doc, .docx, .pdf nhỏ hơn 512KB)</span>
+                        <div class="has-error"></div>
+
+
+                    <?php } ?>
                 </div>
 
             </div>
@@ -155,58 +254,7 @@ $jobApply = $job->job_url->vn;
                 </div>
             <?php } ?>
 
-            <div id="noCV" style="<?php if (!isset($checkOption) || $checkOption == "false") echo "display:none"; ?>" >
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Japanese level</label>
-                    <div class="col-sm-10">
-                        <select name="jpLevel" class="form-control" >
-                            <option value="0" >Beginner</option>
-                            <option value="1"  >Intermediate</option>
-                            <option value="2"  >Advanced</option>
-                            <option value="3"  >Fluent</option>
 
-                        </select>
-                        <div class="has-error"></div>
-                    </div>
-                </div>
-
-
-                <div class="form-group ">
-                    <label  class="col-sm-2 control-label">IT experience</label>
-                    <div class="col-sm-5 input-container">
-                        <select name="itExp" class="form-control"  >
-                            <option value="0 year"  >0 year</option>
-                            <option value="0-1 year"  >0-1 year</option>
-                            <option value="more than 1 years"  >more than 1 years</option>
-                            <option value="more than 2 years"  >more than 2 years</option>
-                            <option value="more than 3 years"  >more than 3 years</option>
-                            <option value="more than 4 years"  >more than 4 years</option>
-                            <option value="more than 5 years"  >more than 5 years</option>
-                        </select>
-                        <div class="has-error"></div>
-
-                    </div>
-                </div>
-
-
-                <div class="form-group ">
-                    <label  class="col-sm-2 control-label">Management</label>
-                    <div class="col-sm-5 input-container">
-                        <select name="managerExp" class="form-control">
-                            <option value="0 year" >0 year</option>
-                            <option value="0-1 year"  >0-1 year</option>
-                            <option value="more than 1 years" >more than 1 years</option>
-                            <option value="more than 2 years"  >more than 2 years</option>
-                            <option value="more than 3 years"  >more than 3 years</option>
-                            <option value="more than 4 years"  >more than 4 years</option>
-                            <option value="more than 5 years"  >more than 5 years</option>
-                        </select>
-                        <div class="has-error"></div>
-
-                    </div>
-                </div>
-
-            </div>
 
 
 
@@ -220,8 +268,8 @@ $jobApply = $job->job_url->vn;
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <input type="hidden" id="isSent" name="isSent" value="OK" />
-                    <button type="submit"  id="applyButton" value="upload" class="btn btn-red btn-lg" style="min-width:40%">Nộp đơn</button>&nbsp;&nbsp;&nbsp;
-                    <a href="javascript:toggleCVform(0)" id="cancel_btn"  class="cv_link" style="<?php echo "display:none"; ?> ">Cancel and apply with CV</a>
+                    <button onclick="ga('send', 'event', 'apply', 'click', 'applyindescription');" type="submit"  id="applyButton" value="upload" class="btn btn-red btn-lg" style="min-width:40%">Nộp đơn</button>&nbsp;&nbsp;&nbsp;
+
                 </div>
                 <div style="text-align:center"><br/>*Nhấp chọn "Nộp đơn", tôi đã đọc và đồng ý với các <a href="<?php echo base_url("about/term") ?>" target="_blank">Thỏa thuận sử dụng</a>.</div>
             </div>
@@ -281,29 +329,53 @@ $jobApply = $job->job_url->vn;
 <script src="<?php echo base_url("static/js/jquery-2.1.1.min.js") ?>" ></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo base_url("static/js/bootstrap.min.js"); ?>"></script>
-<!-- heapanalytics -->
-<script type="text/javascript">
-                        window.heap = window.heap || [], heap.load = function (t, e) {
-                            window.heap.appid = t, window.heap.config = e;
-                            var a = document.createElement("script");
-                            a.type = "text/javascript", a.async = !0, a.src = ("https:" === document.location.protocol ? "https:" : "http:") + "//cdn.heapanalytics.com/js/heap-" + t + ".js";
-                            var n = document.getElementsByTagName("script")[0];
-                            n.parentNode.insertBefore(a, n);
-                            for (var o = function (t) {
-                                return function () {
-                                    heap.push([t].concat(Array.prototype.slice.call(arguments, 0)))
-                                }
-                            }, p = ["clearEventProperties", "identify", "setEventProperties", "track", "unsetEventProperty"], c = 0; c < p.length; c++)
-                                heap[p[c]] = o(p[c])
-                        };
-                        heap.load("1726761437");
-</script>
+
+<!-- heapanalytics --><?php /*
+              <script type="text/javascript">
+              window.heap = window.heap || [], heap.load = function (t, e) {
+              window.heap.appid = t, window.heap.config = e;
+              var a = document.createElement("script");
+              a.type = "text/javascript", a.async = !0, a.src = ("https:" === document.location.protocol ? "https:" : "http:") + "//cdn.heapanalytics.com/js/heap-" + t + ".js";
+              var n = document.getElementsByTagName("script")[0];
+              n.parentNode.insertBefore(a, n);
+              for (var o = function (t) {
+              return function () {
+              heap.push([t].concat(Array.prototype.slice.call(arguments, 0)))
+              }
+              }, p = ["clearEventProperties", "identify", "setEventProperties", "track", "unsetEventProperty"], c = 0; c < p.length; c++)
+              heap[p[c]] = o(p[c])
+              };
+              heap.load("1726761437");
+              </script>
+             */ ?>
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>static/js/additional-methods.min.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
 
 <script type="text/javascript">
+                        $("input[type=radio][name=resumeApply]").click(function () {
+                            var value = $(this).val();
 
+                            if (value == "newAttachment") {
+
+                                $('.preview-cv').hide();
+
+                                $("#inputFile").rules("add", {
+                                    required: true,
+                                    extension: "pdf|doc|docx",
+                                    filesize: true,
+                                    messages: {
+                                        required: "Vui lòng đính kèm hồ sơ.",
+                                        extension: "Định dạng file không hỗ trợ."
+                                    }
+                                });
+                            } else {
+
+                                $("#inputFile").rules("remove");
+
+                                $('.preview-cv').show();
+                            }
+                        });
                         //custom validation rule
                         $.validator.addMethod("customemail",
                                 function (value, element) {
@@ -312,20 +384,29 @@ $jobApply = $job->job_url->vn;
                                 },
                                 "<?php echo "Vui lòng nhập email." ?>"
                                 );
+                        $.validator.addMethod("custompassword",
+                                function (value, element) {
 
+                                    var email = $("#inputEmail").val();
+                                    var arr = email.split('@');
+                                    if ((arr[0] == $("#inputPassword").val()) || (email == $("#inputPassword").val()))
+                                        return false;
+                                    else
+                                        return true;
+                                },
+                                "<?php echo "Mật khẩu không đủ mạnh." ?>"
+                                );
                         $.validator.addMethod("customephone",
                                 function (value, element) {
                                     return /^[0-9().-]+$/.test(value);
                                 },
                                 "Vui lòng nhập số điện thoại."
                                 );
-
                         $.validator.addMethod("filesize",
                                 function (value, element) {
 
-                                    if ($(element).attr('type') == "file"
-                                            && ($(element).hasClass('required')
-                                                    || element.files.length > 0)) {
+
+                                    if ($(element).attr('type') == "file" && ($(element).hasClass('required') || element.files.length > 0)) {
                                         var size = 0;
                                         var $form = $(element).parents('form').first();
                                         var $fel = $form.find('input[type=file]');
@@ -340,11 +421,11 @@ $jobApply = $job->job_url->vn;
                                             return size <= $max.val();
                                         }
                                     }
+
                                     return true;
                                 },
                                 "Dung lượng tập tin không phù hợp, Vui lòng chọn tập tin khác."
                                 );
-
                         $("#frmSignUp").validate({
                             rules: {
                                 inputFirstName: {
@@ -360,16 +441,16 @@ $jobApply = $job->job_url->vn;
                                 inputPassword: {
                                     required: true,
                                     minlength: 4,
-                                    maxlength: 20
+                                    maxlength: 20,
+                                    custompassword: true
+                                }, inputFile: {
+                                    required: true,
+                                    extension: "pdf|doc|docx",
+                                    filesize: true
                                 },
                                 inputPhone: {
                                     required: false,
                                     customephone: false
-                                },
-                                inputFile: {
-                                    required: true,
-                                    extension: "pdf|doc|docx",
-                                    filesize: true
                                 },
                                 itExp: {
                                     required: false
@@ -419,7 +500,6 @@ $jobApply = $job->job_url->vn;
                                 element.parents("div.input-container").find(".has-error").append(error);
                             }
                         });
-
                         //---------------------action to check email and password------------------------------------------------//
                         var def;
                         var emailTimeout;
@@ -427,14 +507,12 @@ $jobApply = $job->job_url->vn;
                         var local = {};
                         var secret = "X2{mY@T;v.zgTPs";
                         var currentEmail;
-
                         var newMessage = "Vui lòng thiết lập mật khẩu để nộp đơn.<br />Bạn sẽ đăng ký tài khoản ở JapanWorks và VietnamWorks.";
                         var existMessage = "Bạn có tài khoản ở Vietnamwork!<br />Nhập mật khẩu VietnamWorks của bạn.";
-
                         function fillPassword() {
+
                             var email = $("#inputEmail").val();
                             var passEl = $("#inputPassword");
-
                             if (typeof (Storage) !== "undefined" && typeof (local[email]) !== "undefined") {
                                 passEl.val(CryptoJS.AES.decrypt(local[email], secret).toString(CryptoJS.enc.Utf8));
                                 checkPasswordVNW("Mật khẩu đã bị thay đổi, vui lòng nhập lại");
@@ -445,6 +523,7 @@ $jobApply = $job->job_url->vn;
                         }
 
                         function savePassword() {
+
                             local[$("#inputEmail").val()] = CryptoJS.AES.encrypt($("#inputPassword").val(), secret).toString();
                             if (typeof (Storage) !== "undefined") {
                                 local.currentEmail = $("#inputEmail").val();
@@ -457,15 +536,12 @@ $jobApply = $job->job_url->vn;
                         }
 
                         $("#checkPassword").val(0);
-
                         var emailVal = $("#checkActiveEmail").val();
-
                         if (emailVal !== '') {
                             $("#loadData").show();
                             def = $.Deferred();
                             def.promise();
                             def.resolve(emailVal);
-
                             var forgetText = $("#forget-text");
                             if (emailVal == 1 || emailVal == 3) {
                                 forgetText.html(existMessage);
@@ -477,6 +553,7 @@ $jobApply = $job->job_url->vn;
                         }
 
                         $(document).ready(function () {
+
                             $('.check-option').val("false");
                             // when User go back agian
 
@@ -491,13 +568,11 @@ $jobApply = $job->job_url->vn;
                                 checkEmailExistVNW();
                             });
                         });
-
                         function checkPasswordVNW(msg) {
 
                             if ($("#checkActiveEmail").val() == "1" && $("#inputPassword").val() !== "") {
                                 $('#passLoading').show();
                                 $('#applyButton').attr('disabled', 'disabled');
-
                                 clearTimeout(passTimeout);
                                 passTimeout = setTimeout(function () {
                                     $.ajax({
@@ -517,7 +592,6 @@ $jobApply = $job->job_url->vn;
                                                 $("#checkPassword").val(0);
                                                 $("#loadData").find(".has-error").empty();
                                                 var email = $("#inputEmail").val();
-
                                                 if (typeof (msg) !== "undefined") {
                                                     $("#loadData").find(".has-error").append("<img alt='error' src='<?php echo base_url('static/img/error.png'); ?>' style='width: 15px' /><span class='textPass' style='margin-left: 5px !important'>" + msg + "</span>");
                                                     delete local[email];
@@ -533,7 +607,6 @@ $jobApply = $job->job_url->vn;
                                         }
                                     }); //end load ajax
                                 }, 1000);
-
                             }
                             else {
                                 $("#loadData").find(".has-error").empty();
@@ -549,12 +622,10 @@ $jobApply = $job->job_url->vn;
                             if ($("#inputEmail").val() != "" && $("#inputEmail").valid() === true && $("#inputEmail").val() != currentEmail) {
                                 $('#passLoading').show();
                                 $('#applyButton').attr('disabled', 'disabled');
-
                                 clearTimeout(emailTimeout);
                                 emailTimeout = setTimeout(function () {
                                     def = $.Deferred();
                                     def.promise();
-
                                     $.ajax({
                                         url: "<?php echo base_url('/jobs/checkEmailExist'); ?>",
                                         type: 'POST', data: {'email': $("#inputEmail").val()},
@@ -578,11 +649,8 @@ $jobApply = $job->job_url->vn;
 
                                             $('#passLoading').hide();
                                             $('#applyButton').removeAttr('disabled');
-
                                             fillPassword();
-
                                             def.resolve($("#checkActiveEmail").val());
-
                                             currentEmail = $("#inputEmail").val();
                                         }
                                     });
@@ -592,15 +660,12 @@ $jobApply = $job->job_url->vn;
                                 $("#loadData").hide();
                                 $("#inputPassword").val('');
                                 $("#loadData").find(".has-error").empty();
-
                                 $("#forgotPass").hide();
                                 $("#checkPassword").val(0);
-
                                 forgetText.html("");
                                 clearTimeout(emailTimeout);
                                 $('#passLoading').hide();
                                 $('#applyButton').removeAttr('disabled');
-
                                 currentEmail = null;
                             }
 
@@ -608,6 +673,7 @@ $jobApply = $job->job_url->vn;
 
                         function forgotPassword(e)
                         {
+
                             $.ajax({
                                 url: "<?php echo base_url('/jobs/resendPassword'); ?>",
                                 type: 'POST', data: {'email': $("#inputEmail").val()},
@@ -649,14 +715,17 @@ $jobApply = $job->job_url->vn;
                         }
 
                         function showPassworkForm(e) {
+
                             if ($("#checkActiveEmail").val() == "1") {
                                 $("#loadData").show();
                             }
                         }
 
                         function vaidateBeforeSubmit(e) {
+
                             e.preventDefault();
                             if (typeof (def) != "undefined") {
+
                                 console.log($("#checkActiveEmail").val());
                                 def.done(function (result) {
                                     var activeEmail = $("#checkActiveEmail").val();
@@ -667,6 +736,22 @@ $jobApply = $job->job_url->vn;
                                     }
                                 });
                             } // end of undefined
+                            else {
+
+                                if ($("#checkOldCV").val() == "false"
+                                        && ($("input[name='resumeApply']:checked").val() == "currentResume")) {
+
+
+                                }
+                                else {
+
+                                    if ($("#frmSignUp").valid() == true) {
+
+                                        fixSubmit();
+                                    }
+                                }
+                            }
+
                         }
 
                         function fixSubmit() {
@@ -684,20 +769,7 @@ $jobApply = $job->job_url->vn;
                             });
                         }
 
-                        function toggleCVform(z) {
-                            if (z == 1) {
-                                $('.check-option').val("true");
-                                $("#attachCV").hide();
-                                $("#noCV").slideDown(400);
-                                $("#cancel_btn").show();
-                            }
-                            else if (z == 0) {
-                                $('.check-option').val("false");
-                                $("#attachCV").show();
-                                $("#noCV").slideUp(400);
-                                $("#cancel_btn").hide();
-                            }
-                        }
+
 
                         function showTab(id) {
                             $('#myTab a[href="' + id + '"]').tab('show')
@@ -721,5 +793,6 @@ $jobApply = $job->job_url->vn;
                                 showTopApply();
                             });
                         });
+
 
 </script>

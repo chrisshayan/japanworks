@@ -113,7 +113,7 @@
         District 1, Ho Chi Minh City, Vietnam<br>
         Tel: (84 8) 5404 1373 - Ext: 3334 / Fax: (84 8) 5404 1372<br>
         <a href="http://www.vietnamworks.com" target="_blank">http://www.vietnamworks.com</a><br>
-        <a href="http://www.japan.vietnamworks.com" target="_blank">http://www.japan.vietnamworks.com</a>
+        <a href="http://stage.jw.vitalify.vn" target="_blank">http://stage.jw.vitalify.vn</a>
     </div>
 
 </div>

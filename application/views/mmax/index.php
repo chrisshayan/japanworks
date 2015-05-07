@@ -343,20 +343,20 @@
                 //custom validation rule
 
                 $.validator.addMethod("customemail",
-                        function(value, element) {
+                        function (value, element) {
                             return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
                         },
                         "Địa chỉ email không hợp lệ."
                         );
                 $.validator.addMethod("customephone",
-                        function(value, element) {
+                        function (value, element) {
                             return /^[0-9().-]+$/.test(value);
                         },
                         "Số điện thoại không hợp lệ."
                         );
                 $.validator.addMethod(
                         "filesize",
-                        function(value, element) {
+                        function (value, element) {
 
                             if ($(element).attr('type') == "file" && ($(element).hasClass('required')
                                     || element.files.length > 0)) {
@@ -445,12 +445,12 @@
                     },
                     errorClass: "has-error",
                     errorElement: "span",
-                    errorPlacement: function(error, element) {
+                    errorPlacement: function (error, element) {
                         element.parent().find(".has-error").append(error);
                     }
 
                 });
-                $(document).ready(function() {
+                $(document).ready(function () {
                     $('.check-option').val("false");
                 });
 
@@ -460,7 +460,7 @@
 
             function scrollToAnchor(aid) {
                 var aTag = $("a[name='" + aid + "']");
-                $('html,body').animate({scrollTop: aTag.offset().top}, 'slow', function() {
+                $('html,body').animate({scrollTop: aTag.offset().top}, 'slow', function () {
                     $("#topApply").hide();
                 });
             }
@@ -492,11 +492,11 @@
                 }
             }
 
-            $(function() {
+            $(function () {
                 var st = $("#title_area").html();
                 $("#topApply").html(st);
 
-                $(window).scroll(function() {
+                $(window).scroll(function () {
                     showTopApply();
                 });
 

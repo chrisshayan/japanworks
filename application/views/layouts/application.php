@@ -31,9 +31,8 @@
         <!-- Important Owl stylesheet -->
         <link rel="stylesheet" href="<?php echo base_url("static/css/owl.carousel.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("static/css/owl.theme.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/font-awesome.min.css") ?>">
         <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.11.1.min.js"></script>
-        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.fancybox.pack.js"></script>
-        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/functions.js"></script>
         <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
         <?php if (ENVIRONMENT_REAL) { ?>
             <script>
@@ -91,7 +90,33 @@
                     <div class="col-sm-9 left_side">
                         <!--  comment out banner rakus -->
                         <?php if ($this->_showHomeIntro) : ?>
-                            <div align="center" class="mb20"><a href="<?php echo site_url("/Japanesebeginner") ?>"><img src="<?php echo base_url("/static/img/xalo/intro_xalolead.png") ?>" width="100%"  alt=""/></a></div>
+
+                            <?php /*  <div align="center" class="mb20"><a href="<?php echo site_url("/Japanesebeginner") ?>"><img src="<?php echo base_url("/static/img/xalo/intro_xalolead.png") ?>" width="100%"  alt=""/></a></div> */ ?>
+                            <?php /*
+                              <div class="benefit-search">
+                              <h2>Tìm kiếm theo Phúc lợi/Quyền lợi (BETA)</h2>
+                              <ul>
+                              <li>
+                              <a href="<?php echo site_url('benefit/WorkInJapan'); ?>">
+                              <span class="glyphicon glyphicon-gift"></span>
+                              <strong>Cơ hội làm việc tại Nhật Bản</strong>
+                              </a>
+                              </li>
+                              <li>
+                              <a href="<?php echo site_url('benefit/JapaneseClass'); ?>">
+                              <span class="glyphicon glyphicon-gift"></span>
+                              <strong>Cơ hội được rèn luyện tiếng Nhật</strong>
+                              </a>
+                              </li>
+                              <li>
+                              <a href="<?php echo site_url('benefit/Over1000'); ?>">
+                              <span class="glyphicon glyphicon-gift"></span>
+                              <strong>Mức lương trên $1000</strong>
+                              </a>
+                              </li>
+                              </ul>
+                              </div>
+                             */ ?>
                         <?php endif; ?>
 
                         <?php echo $this->ocular->yield(); ?>
@@ -100,13 +125,29 @@
                     <!-- PAGE RIGHT SIDE -->
                     <div class="col-sm-3 right_side">
                         <?php
-                        if ($this->_showQa) {
-                            echo render_partial("/homeQa");
-                        }
                         ?>
                         <?php
                         if ($this->_showEventFb) {
                             echo render_partial("/eventFb");
+                        }
+                        ?>
+                        <?php if ($this->_showHomeIntro) : ?>
+                            <!-- Beginner -->
+                            <div class="beginner-section">
+                                <h3>
+                                    <a href="<?php echo site_url('Japanesebeginner'); ?>">
+
+                                        <img src="<?php echo base_url("static/img/beginner-side-banner.jpg"); ?>" alt="">
+                                        <strong>Nổi bật trong tháng</strong>
+                                    </a>
+                                </h3>
+
+                            </div>
+                            <!-- Beginner -->
+                        <?php endif; ?>
+                        <?php
+                        if ($this->_showQa) {
+                            echo render_partial("/homeQa");
                         }
                         ?>
 
@@ -115,6 +156,7 @@
                             render_partial($sideBar);
                         }
                         ?>
+
                     </div>
                 </div>
             </div>

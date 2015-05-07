@@ -1,6 +1,7 @@
 <div class = "panel" id="search-widget">
     <div class = "panel-heading"><h2><span class = "glyphicon glyphicon-search"></span> TÌM VIỆC LÀM PHÙ HỢP</h2></div>
     <div class = "panel-body">
+
         <form name="search" id="frm_block_quick_search" action="<?php echo base_url() ?>" method="post">  <!--onsubmit="return submitBlockSearchForm()"-->
             <div class="row">
                 <div class="col-sm-9">
@@ -36,7 +37,7 @@
                 </div>
                 <div class="col-sm-3" >
                     <div class="mb10 col-sm-12">
-                        <input type="submit" class="btn btn-orange" id="btnSearch" value="Tìm kiếm" style="width:100%;">
+                        <input type="submit" class="btn btn-orange" id="btnSearch" value="Tìm kiếm" style="width:100%;" data-original-title="" title="">
                     </div>
                     <div class="mb10" style="line-height:40px; display: none"><i class="glyphicon glyphicon-plus" id="more-critera-toggle" data-target="#more-criteria" data-toggle="collapse"></i></div>
                 </div>

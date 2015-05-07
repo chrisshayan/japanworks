@@ -9,84 +9,6 @@ class Xalo extends MY_Controller {
         parent::__construct();
     }
 
-    protected function sendEmail($data) {
-
-        $config = Array(
-            'protocol' => 'sendmail',
-            'smtp_host' => SMTP_HOST,
-            'smtp_port' => SMTP_PORT,
-            'mailtype' => 'html',
-            'charset' => MAIL_CHARSET,
-            'smtp_timeout' => SMTP_TIMEOUT,
-            'wordwrap' => TRUE,
-        );
-        $linkImg = "http://japan.vietnamworks.com/static/img/logo.png";
-        $this->load->library('email', $config);
-
-        //send mail to user
-        $this->email->set_newline("\r\n");
-        /*
-          $this->email->from(EMAIL_SENDER, NAME_SENDER);
-          //$this->email->reply_to();
-          $this->email->to($data['email']); // change it to
-          // $this->email->to("vfa.hienhq@gmail.com"); // change it to yours
-          $this->email->subject(SUBJECT_FOR_XALO_USER . $data['fullname']);
-          $this->email->message($this->load->view('xalo/xalo_end_user_template', $data, true));
-          $results = $this->email->send();
-         */
-        //new 09.02.2015
-        $results = true;
-        if ($results) { //send mail to company
-            $this->email->clear();
-            $this->email->from(EMAIL_SENDER, NAME_SENDER); // change it to yours
-            //  $this->email->reply_to();
-            //list mail to
-            $listTo = (unserialize(LIST_MAIL_TO_XALO)); //$this->email->to($data['mailto']);
-            $this->email->to($listTo);
-            // $this->email->to('info@mmj.com.vn');
-            // $listBBC = (unserialize(LIST_MAIL_BBC_XALO));
-            // $this->email->bcc($listBBC);
-            $this->email->subject((SUBJECT_FOR_XALO_COMPANY));
-            $this->email->message($this->load->view('xalo/xalo_company_template', array("data" => $data), true));
-
-
-
-            $results_after = $this->email->send();
-            return $results_after;
-        } else {
-            return $results;
-        }
-    }
-
-    public function thanks() {
-        $this->lang->load('message', $this->_lang);
-        $this->_contentTitle = $this->lang->line("apply_job_title");
-        $this->ocular->render('emptyLayoutApply');
-    }
-
-    function valid_for_email($str) {
-
-        if (!preg_match("/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/", $str)) {
-            $this->form_validation->set_message('valid_for_email', 'Please enter your email.');
-            return FALSE;
-        } else {
-
-            return TRUE;
-        }
-        // return (!preg_match("/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/", $str)) ? FALSE : TRUE;
-    }
-
-    function valid_for_phone($str) {
-
-        if (!preg_match("/^[0-9().-]+$/", $str)) {
-            $this->form_validation->set_message('valid_for_phone', 'Please enter your phone number');
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-        // return (!preg_match("/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/", $str)) ? FALSE : TRUE;
-    }
-
     public function index() {
         $this->load->library('form_validation');
         $this->load->model('special_users_model');
@@ -101,13 +23,8 @@ class Xalo extends MY_Controller {
         //----load search----//
         $params = $this->uri->uri_to_assoc(2);
         $search = new MySearch();
-
-
-
         if (isset($params["p"])) {
-
             $pageNumber = ($params["p"] / $search->limit);
-
             if ($pageNumber >= 1) {
                 $search->page_number = (int) floor($pageNumber) + 1;
             }
@@ -135,7 +52,6 @@ class Xalo extends MY_Controller {
         } else {
             $this->ocular->set_view_data("data", array());
         }
-        //
         //
         //pagination
         $config = array();
@@ -171,47 +87,46 @@ class Xalo extends MY_Controller {
 
         $this->pagination->initialize($config);
         $this->ocular->set_view_data("valueShowRecord", $valueShowRecord);
+        //icon of benefit
+        $benefitIcon = array('', 'fa-dollar', 'fa-user-md', 'fa-file-image-o', 'fa-graduation-cap', 'fa-trophy',
+            'fa-book', 'fa-laptop', 'fa-mobile', 'fa-plane', 'fa-glass',
+            'fa-cab', 'fa-coffee', 'fa-gift', 'fa-child', 'fa-check-square-o');
+        $this->ocular->set_view_data("benefitIcon", $benefitIcon);
+        //--end icon of benefit
+//get information from Event FB
+        $fileJson = 'static/json/token.json';
+        $accToken = file_get_contents($fileJson);
 
+        $listEvent = $this->callData(0);
 
+        $this->ocular->set_view_data("listEvent", $listEvent);
         $this->ocular->render('blank');
     }
 
-    /**
-     * Description  Register account to VNW
-     * API:  /users/register....
-     * Author       Cuong.Chung
-     * Date         17/12/2014
-     */
-    public function getCounpoun() {
-        $this->load->library('form_validation');
+    public function callData($num) {
+        $fileJson = 'static/json/token.json';
+        $accToken = file_get_contents($fileJson);
+        $accToken = str_replace('"', '', $accToken);
+        $apiListEvent = sprintf(API_FB_EVENT_LIST, FB_PAGE_ID, $accToken);
 
-        $this->load->helper(array('form', 'url'));
-        $this->load->model('special_users_model');
+        $listEvent = getCurl($apiListEvent);
 
-
-
-        //check option when insert db
-        $dataToStore = array(
-            'email' => $this->input->post('email'),
-            'fullname' => $this->input->post('fullname'),
-            'phonenumber' => $this->input->post('phone'),
-            'location' => $this->input->post('location'),
-            'yearofbirth' => $this->input->post('yearofbirth'),
-            'jplevel' => $this->input->post('japanlv'),
-            'actflg' => 1,
-            "createdate" => date("Y-m-d H:i:s"),
-            "updatedate" => date("Y-m-d H:i:s")
-        );
-
-        $this->special_users_model->registerUserToData($dataToStore);
-        $sendMail = $this->sendEmail($dataToStore);
-        //after send mail
-        if ($sendMail) {
-            echo 'true';
-            // redirect('xalo/thanks');
+        if (isset($listEvent->error->code) && $listEvent->error->code == '190') {
+            //if call function repeat a lot . stop it
+            if ($num > 5) {
+                return null;
+            }
+            $num++;
+            $apiGetEvent = sprintf(API_FB_GET_TOKEN, FB_APP_ID, FB_SERCRET_ID);
+            $appToken = file_get_contents($apiGetEvent);
+            $accToken = str_replace('"', '', $accToken);
+            $file = FCPATH . "static/json/token.json";
+            $fh = fopen($file, 'w') or die("Error opening output file");
+            fwrite($fh, json_encode($appToken, 256));
+            fclose($fh);
+            $this->callData($num);
         } else {
-
-            echo 'false';
+            return $listEvent;
         }
     }
 

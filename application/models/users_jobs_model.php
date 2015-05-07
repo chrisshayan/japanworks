@@ -44,4 +44,24 @@ class Users_jobs_model extends MY_Model {
         return FALSE;
     }
 
+    /**
+     * Description  Get information about CV of USer
+     * Author       Cuong.Chung
+     * Date         06.04.2015
+     */
+    function getInformationOfUserFromSpecialJobs($email) {
+
+        $this->db->where('email', $email);
+        $this->db->order_by("createdate", "desc");
+        $this->db->limit(1);
+
+        $query = $this->db->get('tr_special_jobs');
+
+        if ($query != NULL && $query->num_rows() > 0) {
+
+            return $query->row_array();
+        }
+        return FALSE;
+    }
+
 }

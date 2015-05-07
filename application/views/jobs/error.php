@@ -5,12 +5,11 @@
 
         </div>
     </div>
-
-    <div align="center" class="mb20">
-        <h3 class="txtGray"><span style="color:red">Sai mật khẩu.</span> Nhấn vào <a href="javascript:history.back()">đây</a> để làm lại.<br>
-        </h3></div>
-    <br>
-    <br>
+    <div class="panel">
+        <div class="panel-heading"><h2><i class="glyphicon glyphicon-remove-sign"> </i> Lỗi</h2></div>
+        <div class="panel-body">
+            <p class="mb10 search_msg" style="font-size:18px"><strong>Hiện tại chúng tôi đang có một rắc rối khi nộp đơn công việc, hãy thử lại vài lần. Xin lỗi vì sự bất tiện này, chúng tôi sẽ giải quyết trong thời gian sớm nhất.</strong></p><br/>Nhấn vào <a href="javascript:history.back()">đây</a> để quay trở lại.<br>    </div>
+    </div>
 
     <div class="panel panel-default">
         <div class="panel-body">

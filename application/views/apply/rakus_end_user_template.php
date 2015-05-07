@@ -9,7 +9,7 @@
     <div style="background-color:#fafafa; padding:20px;"><img src="http://japan.vietnamworks.com/static/img/logo.png" width="250"></div>
     <div style="background-color:#fff;padding:20px; font-size:16px; line-height:1.5; font-family:arial,tahoma,verdana">
         Chào <strong><?php echo $firstname; ?></strong>,<br>
-        Hồ sơ ứng tuyển của bạn đã được gửi đến công ty <strong style="color:red">Rakus Vietnam</strong> qua website <a href="http://japan.vietnamworks.com" target=_blank>Japan.VietnamWorks.com</a>. Nhà tuyển dụng sẽ xem hồ sơ và trực tiếp liên hệ với bạn nếu bạn phù hợp với vị trí ứng tuyển.<br>
+        Hồ sơ ứng tuyển của bạn đã được gửi đến công ty <strong style="color:red">Rakus Vietnam</strong> qua website <a href="http://stage.jw.vitalify.vn" target=_blank>stage.jw.vitalify.vn</a>. Nhà tuyển dụng sẽ xem hồ sơ và trực tiếp liên hệ với bạn nếu bạn phù hợp với vị trí ứng tuyển.<br>
         <br>
         Chúc bạn thành công! <br>
         <br>

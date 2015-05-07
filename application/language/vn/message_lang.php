@@ -1,6 +1,6 @@
 <?php
 
-$lang['login_fail'] = 'Wrong email address or account not yet registered.';
+$lang['login_fail'] = 'Địa chỉ email sai hoặc chưa đăng ký tài khoản.';
 $lang['search_result_title'] = 'Kết quả tìm kiếm';
 $lang['can_not_found'] = "Không thể tìm thấy";
 $lang['register_title'] = 'Đăng Ký';

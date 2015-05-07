@@ -1,4 +1,3 @@
-
 <?php
 
 if (!defined('BASEPATH'))
@@ -113,7 +112,7 @@ class Vitalify extends MY_Controller {
      */
     protected function applyJob($data) {
         $url = API_APPLY_ANOMYMOUS_ATTACH;
-        $apiKey = '8982065e30ea02cf02e93a83824cf65b7de1e69545ce8bed4f2bb3c98a862b70'; //'4c443c7e2c515d6b4b4d693c2f63434a7773226a614846733c4c4d4348'
+        $apiKey = '8982065e30ea02cf02e93a83824cf65b7de1e69545ce8bed4f2bb3c98a862b70';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

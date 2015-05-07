@@ -11,7 +11,7 @@
                             <span class="small">RAKUS Vietnam Co,Ltd. </span>
                         </div>
                         <div class="col-sm-4" align="right" id="top-salary">
-                            <p class="mt10">Salary <strong>1,000 USD</strong> – <strong>1,400 USD</strong></p>
+                            <p class="mt10 txtBlue">Salary <strong>1,000 USD</strong> – <strong>1,400 USD</strong></p>
                         </div>
                     </div>
                 </td>
@@ -240,17 +240,18 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h3>Why have to wait, apply now!</h3>
-
-                    <form class="form-horizontal" role="form">
+                    <form id="frmSignUp" class="form-horizontal" role="form" action="<?php echo base_url(); ?>jobs/apply" method="post" novalidate="novalidate" enctype="multipart/form-data">
                         <div class="form-group ">
-                            <label for="inputFirstName" class="col-sm-2 control-label">Name</label>
+                            <label for="inputFirstName" class="col-sm-2 control-label"><?php echo $this->lang->line("full_name") ?></label>
                             <div class="col-sm-5">
-                                <input type="fname" class="form-control" id="inputFirstName" placeholder="Firstname">
-                                <span for="inputFirstName">Please enter your first name</span>
+                                <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="<?php echo $this->lang->line("first_name") ?>"
+                                       value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['firstname']; ?>">
+                                <span for="inputFirstName"></span>
                             </div>
                             <div class="col-sm-5">
-                                <input type="lname" class="form-control" id="inputLastName" placeholder="Lastname">
-                                <span for="inputLastName">Please enter your last name</span>
+                                <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="<?php echo $this->lang->line("last_name") ?>"
+                                       value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['lastname']; ?>">
+                                <span for="inputLastName"></span>
                             </div>
                         </div>
 
@@ -258,24 +259,25 @@
                         <div class="form-group ">
                             <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" id="inputEmail3" placeholder="Your  email">
-                                <span for="inputEmail3">Please enter your email.</span>
+                                <input type="text" class="form-control" id="inputEmail3" name="inputEmail" placeholder="<?php echo $this->lang->line("input_email") ?>"
+                                       value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['email']; ?>">
+                                <span for="inputEmail"></span>
                             </div>
                         </div>
 
                         <div class="form-group ">
-                            <label for="inputPhone" class="col-sm-2 control-label">Phone number</label>
+                            <label for="inputPhone" class="col-sm-2 control-label"><?php echo $this->lang->line("phone") ?></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputPhone" placeholder="Your  phone number">
-                                <span for="inputPhone">Please enter your phone number</span>
+                                <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="<?php echo $this->lang->line("phone") ?>"
+                                       value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['firstname']; ?>">
+                                <span for="inputPhone"></span>
                             </div>
                         </div>
 
                         <div class="form-group " id="attachCV">
                             <label for="inputResume" class="col-sm-2 control-label">Your resume</label>
                             <div class="col-sm-10">
-                                <input type="file" id="inputResume" placeholder="Your resume">
-                                <div for="inputResume">Please select your resume.</div>
+                                <input type="file" class="left" id="inputFile" name="inputFile"  placeholder="Your resume">
                                 <span class="small">(support .doc, .docx, .pdf less than 512KB)</span>
                                 <div><a href="javascript:toggleCVform(1)" style="text-decoration:underline">Don't have a CV ?</a></div>
                             </div>
@@ -288,66 +290,66 @@
                                 <label class="col-sm-2 control-label">Gender</label>
                                 <div class="col-sm-10">
                                     <label class="radio-inline">
-                                        <input type="radio" name="optionsRadios1" id="Radios1" value="option1" checked>
+                                        <input type="radio" name="gender" id="Radios1" value="option1" checked>
                                         Male
                                     </label>
 
                                     <label class="radio-inline">
-                                        <input type="radio" name="optionsRadios1" id="Radios2" value="option2">
+                                        <input type="radio" name="gender" id="Radios2" value="option2">
                                         Female
                                     </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">IT Experience</label>
+                                <label class="col-sm-2 control-label"><?php echo $this->lang->line("it_skills") ?></label>
                                 <div class="col-sm-10">
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> PHP
+                                        <input type="checkbox" name="itSkills[]" id="itSkills" value="0" checked="checked" />PHP
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="inlineCheckbox2" value="option2"> Java
+                                        <input type="checkbox" name="itSkills[]" id="itSkills" value="1" />JAVA
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="inlineCheckbox3" value="option3"> MySQL
+                                        <input type="checkbox" name="itSkills[]" id="itSkills" value="2" />MYSQL
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" id="inlineCheckbox4" value="option4"> Apache
+                                        <input type="checkbox" name="itSkills[]" id="itSkills" value="3"/>APACHE
                                     </label>
                                 </div>
                             </div>
 
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">Japanese skills</label>
+                                <label class="col-sm-2 control-label"><?php echo $this->lang->line("japanese_level") ?></label>
                                 <div class="col-sm-10">
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios2" id="Radios1" value="option1" checked>Beginner</label>
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios2" id="Radios2" value="option1" checked>Intermediate</label>
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios2" id="Radios3" value="option1" checked>Advanced</label>
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios2" id="Radios4" value="option1" checked>Fluent</label>
+                                    <input type="radio" name="jpLevel" id="itSkills" value="0" checked="checked" style="margin:10px" /><?php echo $this->lang->line("beginner_lv") ?>
+                                    <input type="radio" name="jpLevel" id="itSkills" value="1" style="margin:10px" /><?php echo $this->lang->line("intermediate_lv") ?>
+                                    <input type="radio" name="jpLevel" id="itSkills" value="2"  style="margin:10px" /><?php echo $this->lang->line("advanced_lv") ?>
+                                    <input type="radio" name="jpLevel" id="itSkills" value="3"  style="margin:10px" /><?php echo $this->lang->line("fluent_lv") ?>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">English skills</label>
+                                <label class="col-sm-2 control-label"><?php echo $this->lang->line("english_level") ?></label>
                                 <div class="col-sm-10">
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios3" id="Radios1" value="option1" checked>Beginner</label>
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios3" id="Radios2" value="option1" checked>Intermediate</label>
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios3" id="Radios3" value="option1" checked>Advanced</label>
-                                    <label class="radio-inline"><input type="radio" name="optionsRadios3" id="Radios4" value="option1" checked>Fluent</label>
+                                    <input type="radio" name="enLevel" id="itSkills" value="0" checked="checked" style="margin:10px" /><?php echo $this->lang->line("beginner_lv") ?>
+                                    <input type="radio" name="enLevel" id="itSkills" value="1" style="margin:10px" /><?php echo $this->lang->line("intermediate_lv") ?>
+                                    <input type="radio" name="enLevel" id="itSkills" value="2"  style="margin:10px" /><?php echo $this->lang->line("advanced_lv") ?>
+                                    <input type="radio" name="enLevel" id="itSkills" value="3"  style="margin:10px" /><?php echo $this->lang->line("fluent_lv") ?>
                                 </div>
                             </div>
 
                         </div>
 
-
+                        <input type="hidden" name="checkOption" class="check-option" value="false" />
 
 
                         <br>
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10" align="center">
-                                <button type="submit" class="btn btn-red btn-lg" style="min-width:40%">Apply</button>&nbsp;&nbsp;&nbsp;
+                                <button type="submit" value="upload" class="btn btn-red btn-lg" style="min-width:40%"><?php echo $this->lang->line("apply") ?></button>&nbsp;&nbsp;&nbsp;
                                 <a href="javascript:toggleCVform(0)" id="cancel_btn" class="btn btn-orange btn-lg"  style="min-width:40%">Cancel and apply with CV</a>
                             </div>
                         </div>
@@ -368,131 +370,6 @@
 
 </div>
 
-<!--
-<div class="container" id="section2">
-    <div class="row">
-
-
-        <div class="panel">
-            <div class="panel-heading"><h2>If you are interested, please let us know!</h2></div>
-            <div class="panel-body">
-
-                <form id="frmSignUp" class="form-horizontal" role="form" action="<?php echo base_url(); ?>jobs/apply" method="post" novalidate="novalidate" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="inputFirstName" class="col-sm-3 control-label"><?php echo $this->lang->line("full_name") ?></label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="<?php echo $this->lang->line("first_name") ?>"
-                                   value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['firstname']; ?>">
-                            <span for="inputFirstName"></span>
-                        </div>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="<?php echo $this->lang->line("last_name") ?>"
-                                   value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['lastname']; ?>">
-                            <span for="inputLastName"></span>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="inputEmail" class="col-sm-3 control-label">Email</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="inputEmail3" name="inputEmail" placeholder="<?php echo $this->lang->line("input_email") ?>"
-                                   value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['email']; ?>">
-                            <span for="inputEmail"></span>
-
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="inputPhone" class="col-sm-3 control-label"><?php echo $this->lang->line("phone") ?></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="<?php echo $this->lang->line("phone") ?>"
-                                   value="<?php if (isset($messageError) && $messageError['message_error'] == true) echo $postField['firstname']; ?>">
-                            <span for="inputPhone"></span>
-                        </div>
-                    </div>
-                    <div class="show-attach">
-                        <div class="form-group">
-                            <label for="inputFile" class="col-sm-3 control-label">Your Resume</label>
-                            <div class="col-sm-8">
-
-                                <input type="file" class="left" id="inputFile" name="inputFile"> (supports .doc, .docx, .pdf)
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label"></label>
-                            <div class="col-sm-8">
-                                <a class="flip">Don't have CV?</a>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="show-div" style ="display: none;">
-
-                        <div class="form-group">
-                            <label for="itSkills" class="col-sm-3 control-label"><?php echo $this->lang->line("it_skills") ?></label>
-                            <div class="col-sm-8">
-
-                                <input type="checkbox" name="itSkills[]" id="itSkills" value="0" checked="checked" style="margin:10px" />PHP
-                                <input type="checkbox" name="itSkills[]" id="itSkills" value="1"  style="margin:10px" />JAVA
-                                <input type="checkbox" name="itSkills[]" id="itSkills" value="2"  style="margin:10px" />MYSQL
-                                <input type="checkbox" name="itSkills[]" id="itSkills" value="3"  style="margin:10px" />APACHE
-
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="jpLevel" class="col-sm-3 control-label"><?php echo $this->lang->line("japanese_level") ?></label>
-                            <div class="col-sm-8">
-                                <input type="radio" name="jpLevel" id="itSkills" value="0" checked="checked" style="margin:10px" /><?php echo $this->lang->line("beginner_lv") ?>
-                                <input type="radio" name="jpLevel" id="itSkills" value="1" style="margin:10px" /><?php echo $this->lang->line("intermediate_lv") ?>
-                                <input type="radio" name="jpLevel" id="itSkills" value="2"  style="margin:10px" /><?php echo $this->lang->line("advanced_lv") ?>
-                                <input type="radio" name="jpLevel" id="itSkills" value="3"  style="margin:10px" /><?php echo $this->lang->line("fluent_lv") ?>
-
-
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="enLevel" class="col-sm-3 control-label"><?php echo $this->lang->line("english_level") ?></label>
-                            <div class="col-sm-8">
-                                <input type="radio" name="enLevel" id="itSkills" value="0" checked="checked" style="margin:10px" /><?php echo $this->lang->line("beginner_lv") ?>
-                                <input type="radio" name="enLevel" id="itSkills" value="1" style="margin:10px" /><?php echo $this->lang->line("intermediate_lv") ?>
-                                <input type="radio" name="enLevel" id="itSkills" value="2"  style="margin:10px" /><?php echo $this->lang->line("advanced_lv") ?>
-                                <input type="radio" name="enLevel" id="itSkills" value="3"  style="margin:10px" /><?php echo $this->lang->line("fluent_lv") ?>
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label"></label>
-                            <div class="col-sm-8">
-                                <a class="flip">Cancel and apply CV</a>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="checkOption" class="check-option" value="false" />
-
-
-                    <br>
-
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-8">
-                            <button type="submit" value="upload" class="btn btn-orange"><?php echo $this->lang->line("apply") ?></button>
-                        </div>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-
-
-    </div>
-</div>
-
 
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>static/js/additional-methods.min.js"></script>
@@ -502,9 +379,7 @@
             $(".show-div").slideToggle("slow");
             $(".show-attach").slideToggle("slow");
             //update value button checkOption
-            var hiddenField = $('.check-option'),
-                    val = hiddenField.val();
-            hiddenField.val(val === "true" ? "false" : "true");
+
         });
     });
 </script>
@@ -574,18 +449,24 @@
 
 </script>
 
--->
 <script>
     function toggleCVform(z) {
         if (z == 1) {
+            $('.check-option').val("false");
+
             $("#attachCV").hide();
             $("#noCV").slideDown(400);
             $("#cancel_btn").show();
+
         }
         else if (z == 0) {
+
+            $('.check-option').val("true");
+
             $("#attachCV").show();
             $("#noCV").slideUp(400);
             $("#cancel_btn").hide();
+
         }
     }
 

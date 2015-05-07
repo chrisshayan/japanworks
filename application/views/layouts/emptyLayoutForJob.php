@@ -21,13 +21,27 @@
         <link rel="canonical" href="<?php echo($this->_canonicalLink); ?>" />
 
         <!-- Latest compiled and minified CSS -->
-        <link href="<?php echo base_url(); ?>static/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/font-awesome.min.css">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="<?php echo base_url("static/css/bootstrap.min.css"); ?>">
+
+
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/search.css?201406161725"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/default.css?201406241331"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_grid.css?2014241300"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("static/css/jquery.fancybox.css?v=2.1.5"); ?>" type="text/css" media="screen" />
+        <!-- Important Owl stylesheet -->
+        <link rel="stylesheet" href="<?php echo base_url("static/css/owl.carousel.css"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("static/css/owl.theme.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/font-awesome.min.css") ?>">
+        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.11.1.min.js"></script>
+
+
 
         <link href="<?php echo base_url(); ?>static/css/applyFormSuccess.css" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/bootstrap.min.js"></script>
+
         <?php if (ENVIRONMENT_REAL) { ?>
             <script>
                 (function (i, s, o, g, r, a, m) {
@@ -70,31 +84,7 @@
 
     <body id="similar">
         <!--header-->
-
-
-
-        <div id="header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="logo">
-                            <a href="<?php echo base_url() ?>"><img src="<?php echo base_url("static/img/logo.jpg") ?>" width="313" height="85" class="img-responsive-logo"  alt="JapanWorks"/>
-                                <?php /* echo ($isHome) ? "<h1>": ""?><span class="slogan hidden-xs"><?php echo $this->lang->line("slogan") ?></span><?php echo ($isHome) ? "</h1>": "" */ ?></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div align="right" class="head_right">
-                            <div><a href="<?php echo(MAIN_SITE); ?>"><img src="<?php echo base_url("static/img/power_vnw.png") ?>" width="180" height="54" alt="" class="img-responsive"/></a></div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
+        <?php echo render_partial('/header'); ?>
         <!--End header-->
 
         <div class="container" id="similar-page">

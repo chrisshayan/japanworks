@@ -1,18 +1,27 @@
 <!-- search -->
 
 <?php $this->load->view("/welcome/_searchBox", array("categories" => $hotCats)); ?>
-
 <!--best jobs -->
-<div class = "panel" id="content">
-    <?php $this->load->view("/welcome/_content", array("resultsSearchJob" => $resultsSearchJob)); ?>
+<div class="row">
+    <?php $this->load->view("/welcome/_special"); ?>
+</div>
+<div class="row">
+    <div class="col-sm-9 left_side">
+        <div class = "panel" id="content">
+            <?php $this->load->view("/welcome/_content", array("resultsSearchJob" => $resultsSearchJob)); ?>
+        </div>
+    </div>
+    <!-- Right column -->
+    <div class="col-sm-3 right_side">
+        <p align="center" class="ads_title">QUẢNG CÁO</p>
+        <div class="mb15 ads">
+            <a href="http://japan.vietnamworks.com/job/546823-japanese-interpreter-staff-2-persons-urgent/?utm_source=JPWsBanner&utm_medium=JBU&utm_campaign=Toto" target="_blank"><img src="<?php echo base_url("static/img/toto-banner.jpg") ?>" width="100%" alt="">
+            </a>
+        </div>
+    </div>
 </div>
 
 
-<script>
-    (function ($) {
-        $('.fancybox').fancybox();
-    })(jQuery);
-</script>
 
 <!-- heapanalytics -->
 <script type="text/javascript">
@@ -31,3 +40,4 @@
     };
     heap.load("1726761437");
 </script>
+

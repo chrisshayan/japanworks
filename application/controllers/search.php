@@ -50,28 +50,29 @@ class Search extends MY_Controller {
         //set url canonical
         $this->_canonicalLink = site_url($this->getSearchUrl($search));
 
+        $this->session->set_userdata("link_search", $this->getSearchUrl($search));
         $this->ocular->set_view_data("search", $search);
         $this->session->set_userdata("VNW_SEARCH_DETAIL", $search);
+
         $results = $this->callSearchAPI($search);
 
-        /*
-          //template mockup
-          $curl = curl_init();
-          curl_setopt_array($curl, array(
-          CURLOPT_RETURNTRANSFER => 1,
-          CURLOPT_URL => 'http://demo4947318.mockable.io/test_search',
-          CURLOPT_USERAGENT => 'Codular Sample cURL Request'
-          ));
-          $resp = curl_exec($curl);
-          curl_close($curl);
-          // var_dump($resp);
-          $results = json_decode($resp);
-          // var_dump($results);
-          //template mockup
-         */
+        $arr = $search->job_location;
+
         $countFeature = 0;
+        $dataJobFirst = array();
+        $dataJobSecond = array();
+
+
         if (isset($results->data) && $results->data->total > 0) {
             foreach ($results->data->jobs as $key => $job) {
+
+                //sorf job
+                if ($job->top_level == "1" & $job->job_post_plus == "1") {
+                    array_push($dataJobFirst, $job);
+                } else {
+                    array_push($dataJobSecond, $job);
+                }
+                //count Feature
                 if ($job->job_post_plus == "1" & $job->is_show_job_image == "1") {
                     if ($job->featured_job == "1")
                         $countFeature ++;
@@ -81,7 +82,16 @@ class Search extends MY_Controller {
         } else {
             $this->ocular->set_view_data("data", array());
         }
+
+        // var_dump($dataJobSecond);
         $this->ocular->set_view_data("countFeature", $countFeature);
+
+        //sort job
+
+
+        $this->ocular->set_view_data("dataJobFirst", $dataJobFirst);
+        $this->ocular->set_view_data("dataJobSecond", $dataJobSecond);
+        // information
         // load message from lang file
         $this->lang->load('message', $this->_lang);
         $this->_contentTitle = $this->lang->line("search_result_title");
@@ -147,10 +157,34 @@ class Search extends MY_Controller {
         $this->pagination->initialize($config);
 
         //get information from StackExchange API
-        $qaTop = getCurl(API_QA_TOP . KEY_QA);
+        $qaTop = array(); // $qaTop = getCurl(API_QA_TOP . KEY_QA);
         $this->ocular->set_view_data("qaTop", $qaTop);
-        //end get information from StackExchange API
+        //--end get information from StackExchange API
         $this->ocular->set_view_data("valueShowRecord", $valueShowRecord);
+        //icon of benefit
+        $benefitIcon = array('', 'fa-dollar', 'fa-user-md', 'fa-file-image-o', 'fa-graduation-cap', 'fa-trophy',
+            'fa-book', 'fa-laptop', 'fa-mobile', 'fa-plane', 'fa-glass',
+            'fa-cab', 'fa-coffee', 'fa-gift', 'fa-child', 'fa-check-square-o');
+        $this->ocular->set_view_data("benefitIcon", $benefitIcon);
+        //--end icon of benefit
+        //---facebook
+        $this->load->helper('url');
+        $this->load->library('facebook', array(
+            'appId' => SET_APPID_FB,
+            'secret' => SET_APPSECRET_FB,
+        ));
+        $user = $this->facebook->getUser();
+        $loginFbUrl = $this->facebook->getLoginUrl(array('redirect_uri' => site_url('social/facebookSubmit'),
+            'scope' => array("email") // permissions here
+        ));
+        $this->ocular->set_view_data("loginFbUrl", $loginFbUrl);
+        //---end facebook
+        //Get google
+        $this->load->library('googleplus');
+        $this->_gp_client = $this->googleplus->client;
+        $loginGpUrl = $this->_gp_client->createAuthUrl();
+        $this->ocular->set_view_data("loginGpUrl", $loginGpUrl);
+        //end google
         $this->ocular->render('applicationForSearch');
     }
 
@@ -171,6 +205,88 @@ class Search extends MY_Controller {
         $url = $this->getSearchUrl($search);
 
         redirect($url);
+    }
+
+    /**
+     * Description  Send email to job alert
+     * Author       Cuong.Chung
+     * Date         31.03.2015
+     */
+    public function sendEmailJobAlert() {
+
+        $email = $this->input->post('email');
+        $keyword = $this->input->post('keyword');
+
+        if ($this->input->post('job_categories') != "")
+            $jobCategories = explode(",", $this->input->post('job_categories'));
+        else
+            $jobCategories = array();
+        $jobLevel = $this->input->post('job_level');
+        if ($this->input->post('job_locations') != "")
+            $jobLocation = explode(",", $this->input->post('job_locations'));
+        else
+            $jobLocation = array();
+
+
+        // call login api
+        $criteria = array('email' => $email, "keywords" => $keyword, "job_categories" => $jobCategories, "job_locations" => $jobLocation, "job_level" => $jobLevel, "frequency" => 3, "lang" => 1);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, API_JOB_ALERT);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($criteria, JSON_NUMERIC_CHECK));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(API_HEADER_CONTENT, API_HEADER_TYPE, API_HEADER_ACCEPT));
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT); //timeout in seconds
+        $results = curl_exec($ch);
+        $results = json_decode($results);
+
+        if ($results->meta->code == 200 && $results->data->createdStatus == 'SENT_EMAIL') {
+            echo 'true';
+        } else {
+// print to screen: login faile
+            echo 'false';
+        }
+    }
+
+    /**
+     * Description  Send email to job alert
+     * Author       Cuong.Chung
+     * Date         31.03.2015
+     */
+    public function sendEmailJobAlert2() {
+
+        $email = $this->input->post('email');
+        $keyword = $this->input->post('keywords');
+        $jobCategories = $this->input->post('job_categories');
+        $jobLevel = $this->input->post('job_level');
+        $jobLocation = $this->input->post('job_locations');
+
+        // call login api
+
+        $criteria = array('email' => $email, "keywords" => $keyword, "job_categories" => $jobCategories, "job_locations" => $jobLocation, "job_level" => $jobLevel, "frequency" => 3, "lang" => 1);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, API_JOB_ALERT);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($criteria));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(API_HEADER_CONTENT, API_HEADER_TYPE, API_HEADER_ACCEPT));
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT); //timeout in seconds
+
+        $results = curl_exec($ch);
+        $results = json_decode($results);
+
+        if ($results->meta->code == 200 && $results->data->createdStatus == 'SENT_EMAIL') {
+            echo 'true';
+        } else {
+// print to screen: login faile
+            echo 'false';
+        }
     }
 
 }

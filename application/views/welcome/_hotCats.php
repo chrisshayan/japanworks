@@ -13,3 +13,5 @@ $url = base_url() . "search/index/1/cat/";
         <a href="<?php echo base_url() . "category" ?>" class="pull-right view-all"><?php echo $this->lang->line('view_all') ?></a>
     </div>
 </div>
+
+

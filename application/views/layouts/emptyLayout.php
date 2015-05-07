@@ -21,13 +21,14 @@
         <link rel="canonical" href="<?php echo($this->_canonicalLink); ?>" />
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="<?php echo base_url(); ?>static/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/custom_grid.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/default.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/search.css?201406161725">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/default.css?201406161700">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/custom_grid.css">
+        <link rel="stylesheet" href="<?php echo base_url("static/css/bootstrap.min.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/search.css?201406161725"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/default.css?201406241331"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_grid.css?2014241300"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("static/css/owl.theme.css"); ?>">
         <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.11.1.min.js"></script>
+
         <?php if (ENVIRONMENT_REAL) { ?>
             <script>
                 (function (i, s, o, g, r, a, m) {

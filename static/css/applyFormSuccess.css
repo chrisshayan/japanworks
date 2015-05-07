@@ -166,40 +166,6 @@ a.titleLinkR {color:#fff; padding-top:3px; text-transform:none}
 
 /* =================== */
 
-#header {
-     width:100%;
-     background:#fff;
-     border-bottom:1px solid #ccc;
-     margin-bottom:20px;
-}
-
-#header  a {color:#555!important; text-decoration:none; display:inline-block; margin-left:10px;}
-#header  a:hover {color:#ff0000!important;}
-
-#header .head_right {
-     font-size:12px;
-     padding-top: 10px; 
-}
-
-#footer {
-     width:100%;
-     background:#fff;
-     border-top:4px solid #ff0000;
-     margin-top:30px;
-     padding:20px 0;
-     font-size:12px;
-}
-
-#footer  a {
-     color:#797979;
-     text-decoration:none;
-}
-
-#footer  a:hover {
-     color:#ff0000;
-     text-decoration:none;
-}
-
 #section1 {
      max-height:400px;
      margin-top:10px;
@@ -702,3 +668,5 @@ form * a {color:red!important;}
      color: white;
      font-weight: bold;
 }
+.coupon .progess-bar a{color:#555 }
+//.coupon .skill-list{height:155px }

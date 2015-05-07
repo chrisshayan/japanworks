@@ -1,24 +1,32 @@
 
 <!-- Q&A -->
-<?php if (isset($qaTop->items) && count($qaTop->items) > 0) { //count if ?>
-    <div class="qa-section">
-        <div class="panel-heading">
-            <h3><strong>Hỏi đáp tiếng Nhật</strong></h3>
-        </div>
-        <ul>
-            <?php foreach ($qaTop->items as $key => $item) { ?>
-                <li>
-                    <a href="<?php echo base_url() . 'questions/detail/' . $item->question_id ?>" title="<?php echo $item->title ?>"><?php echo $item->title ?></a>
-                    <div class="info"><?php echo $item->score ?> votes / <?php echo $item->answer_count ?> answers</div>
-                </li>
-            <?php } ?>
+<div class="beginner-section"  >
 
-        </ul>
-        <?php if ($qaTop->has_more == true) { //have more ?>
-            <a href="<?php echo base_url() . 'questions' ?>" title="See all <?php echo $qaTop->total ?> questions" class="all-qa"><strong>See all <?php echo $qaTop->total ?> questions</strong></a>
-        <?php } //end have more  ?>
-    </div>
+    <div><a href="<?php echo base_url('questions'); ?>"><img src="<?php echo base_url('static/img/banner-QA-right.jpg') ?>" width="100%"  alt=""/></a></div>
 
-<?php } //end count if  ?>
+    <?php /*
+      <div class="panel-heading">
+      <h3><a href="<?php echo base_url('questions'); ?>" target="_blank"><strong>Hỏi đáp tiếng Nhật</strong></a></h3>
+      </div>
+      <ul>
+      <li>
+      <a href="<?php echo base_url(); ?>questions/detail/23396" title="How to describe a recurring/retrieved condition?">How to describe a recurring/retrieved condition?</a>
+
+      </li>
+      <li>
+      <a href="<?php echo base_url(); ?>questions/detail/23374" title="When can an adverb use の to modify a noun">When can an adverb use の to modify a noun</a>
+
+      </li>
+      <li>
+      <a href="<?php echo base_url(); ?>questions/detail/23395" title="When to use と and こと?">When to use と and こと?</a>
+
+      </li>
+
+      </ul>
+      <a href="<?php echo base_url('questions'); ?>" title="Hơn 5000 câu hỏi" class="all-qa"><strong>Hơn 5000 câu hỏi</strong></a>
+     *
+     *
+     */ ?>
+</div>
 <!-- end Q&A -->
 

@@ -35,7 +35,8 @@ class Jobs extends MY_Controller {
 
         $jobId = getIdAlias($params["job"]);
         $job = $this->getJobDetail($jobId);
-
+        //check case to store db
+        $checkCase = 0;
         if (!isset($job->data) || !$job->data) {
             redirect(site_url("404"));
         }
@@ -52,163 +53,172 @@ class Jobs extends MY_Controller {
             }
         }
 
-        // var_dump($job->data->job_summary->job_location);
-        //var_dump($job->data->job_summary->job_category);
-        // redirect('jobs/thanks/' . $job->data->job_detail->job_category . '/' . $job->data->job_detail->job_location);
-        // exit;
+        $dataCV = '';
+        if (isset($this->_userInfo->login_token)) {
+            $this->load->model('resumes_model');
+            $dataCV = $this->resumes_model->getInformationOfUser($this->_userInfo->email);
+            $this->ocular->set_view_data('dataCV', $dataCV);
+        }
+
+
         // NEW CODE FOR APPLY FORM
         // 17-12-2014
 
         if ($this->input->post('isSent') == 'OK') {
 
+
             $this->load->library('form_validation');
             //check validate
-            $this->form_validation->set_rules('inputFirstName', 'please enter your first name.', 'trim|required');
-            $this->form_validation->set_rules('inputLastName', 'please enter your last name.', 'trim|required');
-            // $this->form_validation->set_rules('inputPhone', 'please enter your phone number.', 'trim|required|callback_valid_for_phone');
-            $this->form_validation->set_rules('inputEmail', 'please enter your email.', 'trim|required|callback_valid_for_email');
-            $this->form_validation->set_rules('inputFile', 'Please select .', 'trim|callback__do_upload');
-            $linkFile = '';
-            if ($this->form_validation->run() == FALSE) {
-                $this->ocular->set_view_data('checkOption', $this->input->post('checkOption'));
-            } else {
 
-                //chose option attach file
-                //------------------------------------
-                //upload file to server
-                $emailUser = str_replace(array("@", "."), "", $this->input->post('inputEmail'));
-                $nameFolder = UPLOAD_DIR . $emailUser . "/";
-                $config['upload_path'] = $nameFolder;
-                if (!file_exists($nameFolder)) {
-                    mkdir($nameFolder, 0777);
-                }
-                if (file_exists($nameFolder)) {
-                    //writelog file when upload
-                    writelog(date("Y-m-d H:i:s") . " File upload:  " . json_encode($_FILES) . "_" . $this->input->post('inputEmail'));
-                    //chmod for folder
-                    chmod($nameFolder, 0777);
 
-                    $file_name = $_FILES['inputFile']['name'];
-                    $path_parts = pathinfo($file_name);
-                    $extension = @$path_parts['extension'];
 
-                    if ($_FILES['inputFile']['size'] <= LIMIT_FILE_SIZE_FOR_JOBS) {
-                        if (in_array($extension, unserialize(FILE_UPLOAD_EXTENSIONS))) {
-
-                            $uploadfile = $nameFolder . $_FILES['inputFile']['name'];
-
-                            if (move_uploaded_file($_FILES['inputFile']['tmp_name'], $uploadfile)) {
-                                $uploadCV = true;
-                            } else {
-                                $uploadCV = false;
-                                $errorUpload = "Can't upload CV!";
-                                writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $this->input->post('inputEmail'));
-                                $uploadError['upload_error'] = true;
-                                $this->ocular->set_view_data('uploadError', $uploadError);
-                                $this->ocular->set_view_data('errorUpload', $errorUpload);
-                            }
-                        } else {
-                            $uploadCV = false;
-                            $errorUpload = "File extension can not upload!";
-                            writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $this->input->post('inputEmail'));
-                            $uploadError['upload_error'] = true;
-                            $this->ocular->set_view_data('uploadError', $uploadError);
-                            $this->ocular->set_view_data('errorUpload', $errorUpload);
-                        }
+            $emailLog = '';
+            if (isset($this->_userInfo->login_token)) { // user login
+                $this->form_validation->set_rules('inputFirstName', 'please enter your first name.', 'trim|required');
+                $this->form_validation->set_rules('inputLastName', 'please enter your last name.', 'trim|required');
+                if ($this->form_validation->run() == TRUE) {
+                    if ($this->input->post('resumeApply') == "newAttachment") { //chose new CV
+                        $checkCase = 1;
+                        $emailLog = $this->_userInfo->email;
+                        $linkFile = $this->uploadCvToServer($_FILES, $this->_userInfo->email);
+                        //array to put in API apply job
+                        $post = array(
+                            'file_contents' => '@' . $linkFile,
+                            'job_id' => $jobId,
+                            'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
+                            'cover_letter' => '',
+                            'email' => $this->_userInfo->email,
+                            'password' => $this->session->userdata('passwordUser'),
+                            'first_name' => $this->_userInfo->first_name,
+                            'last_name' => $this->_userInfo->last_name,
+                            'lang' => '1'
+                        );
                     } else {
-                        $uploadCV = false;
-                        $errorUpload = "The file selected exceed size limit. Please choose another file. ";
-                        writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $this->input->post('inputEmail'));
-                        $uploadError['upload_error'] = true;
-                        $this->ocular->set_view_data('uploadError', $uploadError);
-                        $this->ocular->set_view_data('errorUpload', $errorUpload);
+                        $checkCase = 2;
+                        $emailLog = $this->_userInfo->email;
+                        $linkFile = FCPATH . $dataCV['linkresume'];
+                        $post = array(
+                            'file_contents' => '@' . $linkFile,
+                            'job_id' => $jobId,
+                            'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
+                            'cover_letter' => '',
+                            'email' => $this->_userInfo->email,
+                            'password' => $this->session->userdata('passwordUser'),
+                            'first_name' => $this->_userInfo->first_name,
+                            'last_name' => $this->_userInfo->last_name,
+                            'lang' => '1'
+                        );
                     }
-                } else {
-                    $uploadCV = false;
-                    $errorUpload = "Directory upload can't exist . ";
-                    writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $this->input->post('inputEmail'));
-                    $uploadError['upload_error'] = true;
-                    $this->ocular->set_view_data('uploadError', $uploadError);
-                    $this->ocular->set_view_data('errorUpload', $errorUpload);
                 }
+            } else { //user not login
+                $checkCase = 3;
+                $emailLog = $this->input->post('inputEmail');
+                $this->form_validation->set_rules('inputFirstName', 'please enter your first name.', 'trim|required');
+                $this->form_validation->set_rules('inputLastName', 'please enter your last name.', 'trim|required');
+                // $this->form_validation->set_rules('inputPhone', 'please enter your phone number.', 'trim|required|callback_valid_for_phone');
+                $this->form_validation->set_rules('inputEmail', 'please enter your email.', 'trim|required|callback_valid_for_email');
+                $this->form_validation->set_rules('inputFile', 'Please select .', 'trim|callback__do_upload');
+                $linkFile = '';
+                if ($this->form_validation->run() == TRUE) {
 
-                if ($uploadCV) {
 
-                    $linkFile = FCPATH . "uploads/" . $emailUser . "/" . $_FILES['inputFile']['name'];
+                    //chose option attach file
+                    //------------------------------------
+                    //upload file to server
+                    $linkFile = $this->uploadCvToServer($_FILES, $this->input->post('inputEmail'));
+                    //----end upload file to server-------------------------------
+                    //check password if mail is exist on VNW or mail is new
+                    $passWord = $this->input->post('inputPassword');
+                    //array to put in API apply job
+                    $post = array(
+                        'file_contents' => '@' . $linkFile,
+                        'job_id' => $jobId,
+                        'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
+                        'cover_letter' => '',
+                        'email' => $this->input->post('inputEmail'),
+                        'password' => $passWord,
+                        'first_name' => $this->input->post('inputFirstName'),
+                        'last_name' => $this->input->post('inputLastName'),
+                        'lang' => '1'
+                    );
                 }
-
-                //----end upload file to server-------------------------------
-                //check password if mail is exist on VNW or mail is new
-                $passWord = $this->input->post('inputPassword');
-
-                //array to put in API apply job
-                $post = array(
-                    'file_contents' => '@' . $linkFile,
-                    'job_id' => $jobId,
-                    'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
-                    'cover_letter' => '',
-                    'email' => $this->input->post('inputEmail'),
-                    'password' => $passWord,
-                    'first_name' => $this->input->post('inputFirstName'),
-                    'last_name' => $this->input->post('inputLastName'),
-                    'lang' => '1'
-                );
-            }
-
-
+            }//check login
             //call API apply job
-           
-              $checkFirst = 0;
-              $result = $this->applyJob($post);
-              $checkUser = 2;
-              $applyFirst = 1;
-              //check result
-              if (($result->meta->code == 200 && $result->meta->message == 'Applied') || ($result->meta->code == 400 && $result->meta->message == 'Job has applied already')) {
-              //writelog CSV
-              if ($result->meta->code == 200 && $result->meta->message == 'Applied') {
-              $applyFirst = 1;
-              } else if ($result->meta->code == 400 && $result->meta->message == 'Job has applied already') {
-              $applyFirst = 2;
-              }
-              if (DISABLE_LOG_CSV == TRUE) {
 
-              if ($this->input->post('checkActiveEmail') == 1) {
-              $textStatusEmail = "ACTIVATED";
-              $checkUser = 1;
-              } else
-              if ($this->input->post('checkActiveEmail') == 3) {
-              $textStatusEmail = "NON_ACTIVATED";
-              $checkUser = 3;
-              } else {
-              $checkUser = 2;
-              $textStatusEmail = "NEW";
-              }
-              $filename = LOG_DIR . LOG_NAME_CSV . '.csv';
-              $totalRecord = count(file($filename));
-              if (file_exists($filename)) {
-              $totalRecord = count(file($filename));
-              } else {
-              $totalRecord = 1;
-              $checkFirst = 1;
-              }
-              $dataLog = array($totalRecord, date("Y-m-d H:i:s"), $jobId, $job->data->job_company->company_name, $textStatusEmail, $this->input->post('inputEmail'));
-              writeLogCSV($dataLog, $checkFirst);
-              }
-              // $this->session->set_userdata("jobIdApplied", $jobId);
-              $this->session->set_userdata("tempInfor", $post);
-              redirect('jobs/thanks/' . $job->data->job_summary->job_category . '/' . $job->data->job_summary->job_location);
-              } else {
-              writelog(date("Y-m-d H:i:s") . " 3 " . var_dump($result));
-              redirect('jobs/error');
-              } 
+            $checkFirst = 0;
+            $result = $this->applyJob($post);
+            $checkUser = 2;
+            $applyFirst = 1;
+            //check result
 
-          //  $this->session->set_userdata("tempInfor", $post);
-          //  redirect('jobs/thanks/' . $job->data->job_summary->job_category . '/' . $job->data->job_summary->job_location);
+            if (($result->meta->code == 200 && $result->meta->message == 'Applied') || ($result->meta->code == 400 && $result->meta->message == 'Job has applied already')) {
+                //save in store
+                if ($checkCase == 1 || $checkCase == 3) {
+                    $emailStore = str_replace(array("@", "."), "", $post['email']);
+                    $dataToStore = array(
+                        'email' => $post['email'],
+                        "firstname" => $post['first_name'],
+                        "lastname" => $post['last_name'],
+                        "nameresume" => $_FILES['inputFile']['name'],
+                        'linkresume' => "uploads/" . $emailStore . "/" . $_FILES['inputFile']['name'],
+                        'actflg' => 1,
+                        "createdate" => date("Y-m-d H:i:s"),
+                        "updatedate" => date("Y-m-d H:i:s")
+                    );
+                    $this->load->model('resumes_model');
+                    $this->resumes_model->updateInformationCV($dataToStore);
+                }
+                //writelog CSV
+                if ($result->meta->code == 200 && $result->meta->message == 'Applied') {
+                    $applyFirst = 1;
+                } else if ($result->meta->code == 400 && $result->meta->message == 'Job has applied already') {
+                    $applyFirst = 2;
+                }
+                if (DISABLE_LOG_CSV == TRUE) {
+
+                    if ($this->input->post('checkActiveEmail') == 1) {
+                        $textStatusEmail = "ACTIVATED";
+                        $checkUser = 1;
+                    } else
+                    if ($this->input->post('checkActiveEmail') == 3) {
+                        $textStatusEmail = "NON_ACTIVATED";
+                        $checkUser = 3;
+                    } else {
+                        $checkUser = 2;
+                        $textStatusEmail = "NEW";
+                    }
+                    $filename = LOG_DIR . LOG_NAME_CSV . '.csv';
+                    $totalRecord = count(file($filename));
+                    if (file_exists($filename)) {
+                        $totalRecord = count(file($filename));
+                    } else {
+                        $totalRecord = 1;
+                        $checkFirst = 1;
+                    }
+                    $dataLog = array($totalRecord, date("Y-m-d H:i:s"), $jobId, $job->data->job_company->company_name, $textStatusEmail, $emailLog);
+                    writeLogCSV($dataLog, $checkFirst);
+                }
+                // $this->session->set_userdata("jobIdApplied", $jobId);
+                $this->session->set_userdata("tempInfor", $post);
+                redirect('jobs/thanks/' . $job->data->job_summary->job_category . '/' . $job->data->job_summary->job_location);
+            } else {
+                writelog(date("Y-m-d H:i:s") . " 3 " . var_dump($result));
+                redirect('jobs/error');
+            }
         }
+
         $this->ocular->set_view_data("job", $job->data);
+
 
 //set right silde bar
         $this->_rightSideBars = array("jobSummary");
+
+
+        //icon of benefit
+        $benefitIcon = array('', 'fa-dollar', 'fa-user-md', 'fa-file-image-o', 'fa-graduation-cap', 'fa-trophy',
+            'fa-book', 'fa-laptop', 'fa-mobile', 'fa-plane', 'fa-glass',
+            'fa-cab', 'fa-coffee', 'fa-gift', 'fa-child', 'fa-check-square-o');
+        $this->ocular->set_view_data("benefitIcon", $benefitIcon);
         $this->ocular->render('applicationNoRegister');
     }
 
@@ -233,6 +243,77 @@ class Jobs extends MY_Controller {
         $results = json_decode($results);
 
         return $results;
+    }
+
+    /**
+     * Description  Upload CV
+
+     * Author       Cuong.Chung
+     * Date         07.4.2015
+     */
+    protected function uploadCvToServer($file, $email) {
+        $linkFile = '';
+        $emailUser = str_replace(array("@", "."), "", $email);
+        $nameFolder = UPLOAD_DIR . $emailUser . "/";
+        $config['upload_path'] = $nameFolder;
+        if (!file_exists($nameFolder)) {
+            mkdir($nameFolder, 0777);
+        }
+        if (file_exists($nameFolder)) {
+            //writelog file when upload
+            writelog(date("Y-m-d H:i:s") . " File upload:  " . json_encode($file) . "_" . $email);
+            //chmod for folder
+            chmod($nameFolder, 0777);
+
+            $file_name = $file['inputFile']['name'];
+            $path_parts = pathinfo($file_name);
+            $extension = @$path_parts['extension'];
+
+            if ($file['inputFile']['size'] <= LIMIT_FILE_SIZE_FOR_JOBS) {
+                if (in_array($extension, unserialize(FILE_UPLOAD_EXTENSIONS))) {
+
+                    $uploadfile = $nameFolder . $file['inputFile']['name'];
+
+                    if (move_uploaded_file($file['inputFile']['tmp_name'], $uploadfile)) {
+                        $uploadCV = true;
+                    } else {
+                        $uploadCV = false;
+                        $errorUpload = "Can't upload CV!";
+                        writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $email);
+                        $uploadError['upload_error'] = true;
+                        $this->ocular->set_view_data('uploadError', $uploadError);
+                        $this->ocular->set_view_data('errorUpload', $errorUpload);
+                    }
+                } else {
+                    $uploadCV = false;
+                    $errorUpload = "File extension can not upload!";
+                    writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $email);
+                    $uploadError['upload_error'] = true;
+                    $this->ocular->set_view_data('uploadError', $uploadError);
+                    $this->ocular->set_view_data('errorUpload', $errorUpload);
+                }
+            } else {
+                $uploadCV = false;
+                $errorUpload = "The file selected exceed size limit. Please choose another file. ";
+                writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $email);
+                $uploadError['upload_error'] = true;
+                $this->ocular->set_view_data('uploadError', $uploadError);
+                $this->ocular->set_view_data('errorUpload', $errorUpload);
+            }
+        } else {
+            $uploadCV = false;
+            $errorUpload = "Directory upload can't exist . ";
+            writelog(date("Y-m-d H:i:s") . " " . $errorUpload . "_" . $email);
+            $uploadError['upload_error'] = true;
+            $this->ocular->set_view_data('uploadError', $uploadError);
+            $this->ocular->set_view_data('errorUpload', $errorUpload);
+        }
+
+        if ($uploadCV) {
+
+            $linkFile = FCPATH . "uploads/" . $emailUser . "/" . $file['inputFile']['name'];
+        }
+        return $linkFile;
     }
 
     /**
@@ -518,7 +599,7 @@ class Jobs extends MY_Controller {
         $this->ocular->set_view_data("titleJob", $titleJob);
         $this->ocular->set_view_data("link", $link);
 
-        $this->ocular->render('emptyLayoutForJob');
+        $this->ocular->render('emptyLayout');
     }
 
 }

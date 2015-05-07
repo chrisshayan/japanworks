@@ -44,8 +44,12 @@ class Logout extends MY_Controller {
             if ($results->meta->code == 200) {
                 // destroy session at my page
                 $this->session->unset_userdata('userInfo');
+                $this->session->unset_userdata('linkBackLogin');
+                $this->session->unset_userdata('passwordUser');
             }
-            redirect(site_url('logout/'));
+            redirect(site_url('/'));
+        } else {
+            redirect(site_url('/'));
         }
     }
 

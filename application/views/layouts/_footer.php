@@ -13,7 +13,12 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>static/js/modernizr.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>static/js/ui.plugins.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>static/js/owl.carousel.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.fancybox.pack.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>static/js/home.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/isotope.pkgd.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/functions.js"></script>
+
 <?php
 if (!isset($search)) {
     $search = new MySearch();
@@ -67,7 +72,7 @@ $keywords = json_encode(trim(str_replace(strtolower(KEYWORD_DEDAULT), '', $searc
         $("#jobLevelMainSearch_chosen .chosen-single").html(jobLevel);
     }
 
-    $(".search-choice-close").click(function() {
+    $(".search-choice-close").click(function () {
         $(this).parent().remove();
         return false;
     });
@@ -77,6 +82,6 @@ $keywords = json_encode(trim(str_replace(strtolower(KEYWORD_DEDAULT), '', $searc
         var aTag = $("a[name='" + aid + "']");
         $('html,body').animate({scrollTop: aTag.offset().top}, 300);
     }
-    $(function() {
+    $(function () {
     });
 </script>
