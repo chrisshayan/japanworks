@@ -49,6 +49,7 @@ $route['Japanesebeginner'] = "xalo";
 $route['kw/(:any)'] = "search/index";
 $route['kw'] = "search";
 
+
 $route['questions/kw/(:any)'] = "questions/index";
 $route['questions/kw'] = "questions";
 
@@ -56,7 +57,19 @@ $route['tags/kw/(:any)'] = "tags/index";
 $route['tags/kw'] = "tags";
 
 
+$route['translation/kw/(:any)'] = "translation/index";
+$route['translation/kw'] = "translation";
 
+$route['qa/kw/(:any)'] = "qa/index";
+$route['qa/kw'] = "qa";
+
+$route['listonlineresumejpw130/kw/(:any)'] = "listonlineresumejpw130/index";
+$route['listonlineresumejpw130/kw'] = "listonlineresumejpw130";
+
+$route['tips/kw/(:any)'] = "tips/index";
+$route['tips/kw'] = "tips";
+$route['tips2/kw/(:any)'] = "tips2/index";
+$route['tips2/kw'] = "tips2";
 $route['tags/result/([a-z]+)/(:any)'] = "tags/result/$1";
 $route['job/(:any)'] = "jobs/view";
 $route['404'] = "error/error404";

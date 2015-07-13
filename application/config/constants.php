@@ -49,12 +49,16 @@ define("KEYWORD_WORKINJAPAN", "workinjapan");
 define("KEYWORD_JAPANESECLASS", "japaneseclass");
 define("KEYWORD_OVER1000", "overthousand");
 define("KEYWORD_HOME", "");
+define("KEYWORD_N1LEVEL", "n01level");
+define("KEYWORD_N2LEVEL", "n02level");
+define("KEYWORD_N3LEVEL", "n03level");
 define("TOOL_TIP", "Liên kết đến Vietnamworks (Japanworks là thành viên của Vietnamworks)");
 
 define("API_SEARCH", API_LINK . '/jobs/search');
 define("API_LOGIN", API_LINK . '/users/login');
 define("API_LOGOUT", API_LINK . '/users/logout');
 define("API_REGISTER", API_LINK . '/users/register');
+define("API_REGISTER_WITHOUT_ACTIVE", API_LINK . '/users/registerWithoutConfirm');
 define("API_GENERAL_CONFIGURATION", API_LINK . '/general/configuration');
 define("API_JOB_DETAIL", API_LINK . '/jobs/view');
 //API for stackExchange
@@ -173,5 +177,7 @@ define("LIST_MAIL_TO_XALO", serialize(array("vfa.cuongcl@gmail.com"))); //mail T
 define("LIST_MAIL_BBC_XALO", serialize(array("vfa.cuongcl@gmail.com"))); //mail BBC for xalo company
 define("SUBJECT_FOR_XALO_COMPANY", 'Get discount from Xalolead'); // subject when send mail for company
 define("SUBJECT_FOR_XALO_USER", 'Xalo đã nhận được hồ sơ của '); // subject when send mail for user
+//config email for qa forum
+define("EMAIL_OF_USER", 'morio@vietnamworks.com'); // subject email for qa forum
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
