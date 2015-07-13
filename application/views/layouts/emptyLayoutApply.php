@@ -19,10 +19,12 @@
         <meta property="og:title_name" content="<?php echo base_url() ?>">
         <meta property="og:description" content="<?php echo ($this->_metaData) ? $this->_metaData : $this->lang->line("meta_data") ?>">
         <link rel="canonical" href="<?php echo($this->_canonicalLink); ?>" />
-
+        <!-- cfp -->
+        <link href="<?php echo base_url("static/cfp/css/bootstrap.min.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/font-awesome/css/font-awesome.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/css/animate.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/css/style.css"); ?>" rel="stylesheet">
         <!-- Latest compiled and minified CSS -->
-        <link href="<?php echo base_url(); ?>static/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>static/css/font-awesome.min.css">
         <link href="<?php echo base_url(); ?>static/css/rakus.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -66,22 +68,24 @@
         <?php } ?>
     </head>
 
-    <body id="">
+    <body class="top-navigation">
         <div id="wrapper">
-            <!--header-->
-            <?php echo render_partial('/headerApply'); ?>
-            <!--End header-->
-
-            <div class="container" id="section2">
-                <div class="row">
-                    <?php echo $this->ocular->yield(); ?>
+            <div id="page-wrapper">
+                <!--header-->
+                <?php echo render_partial('/headerApply'); ?>
+                <!--End header-->
+                <div class="wrapper wrapper-content">
+                    <div class="container" id="section2">
+                        <div class="row">
+                            <?php echo $this->ocular->yield(); ?>
+                        </div>
+                    </div>
                 </div>
+                <!--footer-->
+                <?php echo render_partial('/footer'); ?>
+                <!--End footer-->
             </div>
-
-            <!--footer-->
-            <?php echo render_partial('/footer'); ?>
-            <!--End footer-->
+            <!-- //wrapper -->
         </div>
-        <!-- //wrapper -->
     </body>
 </html>

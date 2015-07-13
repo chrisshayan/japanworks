@@ -3,11 +3,15 @@
     <div class="col-sm-9 job-block red-bold">
         <a target="_blank" href="<?php echo site_url(jobDetailUrl($job->job_id, $job->job_title)) ?>" class="job-title"><?php echo $job->job_title ?></a>
 
+
+
+
         <div class="info">
             <span class="date-info">
                 <span class="glyphicon glyphicon-calendar"></span>
                 <?php echo $job->posted_date; ?>
             </span>
+
             <span class="place-info">
                 <span class="glyphicon glyphicon-globe"></span>
                 <?php
@@ -15,7 +19,7 @@
                 $strLoc = "";
                 foreach ($this->_searchData->locations as $location) {
                     if (in_array($location->location_id, $locations)) {
-                        $strLoc .= $location->lang_en . ', ';
+                        $strLoc .= $location->lang_vn . ', ';
                     }
                 }
                 echo trim($strLoc, ", ");
@@ -46,21 +50,22 @@
         <!-- image job-->
         <?php if ($job->is_show_job_image == "1") { ?>
             <div class="co-photos-block">
-                <?php
-                for ($i = 0; $i < count($job->job_image_url); $i++) {
-                    ?>
-
-                    <a class="fancybox" rel="group_<?php echo $job->job_id; ?>" href="<?php echo $job->job_image_url[$i] ?>" title="">
-                        <img src="<?php echo $job->job_image_url[$i] ?>"  <?php if ($i == 0) { ?> class="first"<?php } ?>>
-                    </a>
+                <div class="lightBoxGallery" id="<?php echo $job->job_id; ?>">
                     <?php
-                }
-                ?>
+                    for ($i = 0; $i < count($job->job_image_url); $i++) {
+                        ?>
+
+                        <a  rel="group_<?php echo $job->job_id; ?>" href="<?php echo $job->job_image_url[$i] ?>" title="" data-gallery="#blueimp-gallery-<?php echo $job->job_id; ?>">
+                            <img src="<?php echo $job->job_image_url[$i] ?>"  <?php if ($i == 0) { ?> class="first"<?php } ?> width="114">
+                        </a>
+                        <?php
+                    }
+                    ?>
+                </div>
             </div>
             <?php
         }
         ?>
-
 
         <!-- skill -->
         <?php if (count($job->skills) > 0) { ?>
@@ -71,16 +76,16 @@
                     $strClass = '';
                     switch ($i) {
                         case 0:
-                            $strClass = 'progress-bar progress-bar-success';
+                            $strClass = 'progress-bar  progress-small progress-bar-success';
                             break;
                         case 1:
-                            $strClass = 'progress-bar progress-bar-warning';
+                            $strClass = 'progress-bar progress-small progress-bar-warning';
                             break;
                         case 2:
-                            $strClass = 'progress-bar progress-bar-danger';
+                            $strClass = 'progress-bar progress-small progress-bar-danger';
                             break;
                         default:
-                            $strClass = 'progress-bar progress-bar-success';
+                            $strClass = 'progress-bar  progress-small progress-bar-success';
                             break;
                     }
                     ?>
@@ -89,7 +94,7 @@
                             <div class = "progress progress-xxs">
 
 
-                                <div class = "<?php echo $strClass ?>" role = "progressbar" aria-valuenow = "<?php echo $skill->skillWeight; ?>" aria-valuemin = "0" aria-valuemax = "100">&nbsp;
+                                <div class = "<?php echo $strClass ?>" role = "progressbar" aria-valuenow = "<?php echo $skill->skillWeight; ?>" aria-valuemin = "0" aria-valuemax = "100" style="width: 100%;">&nbsp;
                                 </div>
                             </div>
                         </div>
@@ -106,16 +111,20 @@
         <?php } ?>
         <!-- end skill -->
 
+
+
+
     </div>
+
     <div class="col-sm-3 name-block"><?php echo $job->job_company ?></div>
 
     <?php if (count($job->benefits) > 0) { ?>
-        <div class="col-sm-12 benefit">
-            <a href="#">
-                <span class="glyphicon glyphicon-gift"></span>
-                &nbsp;Phúc lợi công ty
-                <span class="arrow glyphicon glyphicon-chevron-down"></span>
-            </a>
+        <div class="col-sm-12 benefit benefit<?php echo $job->job_id; ?>">
+
+            <span class="glyphicon glyphicon-gift"></span>
+            &nbsp;Phúc lợi công ty
+            <span class="arrow glyphicon glyphicon-chevron-down"></span>
+
             <ul>
                 <?php foreach ($job->benefits as $benefit) { ?>
                     <li>

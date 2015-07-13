@@ -20,6 +20,16 @@ class Welcome extends MY_Controller {
      * Date         10/06/2014
      */
     function index() {
+
+        $checkShowPopUp = 0;
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $link = $_SERVER['HTTP_REFERER'];
+            if (strpos($link, 'register/success') == true) {
+                $checkShowPopUp = 1;
+            }
+        }
+
+        $this->ocular->set_view_data("checkShowPopUp", $checkShowPopUp);
         //set statistic of job
         $jobStatistic = array();
         // set canonical link
@@ -149,7 +159,7 @@ class Welcome extends MY_Controller {
         $loginGpUrl = $this->_gp_client->createAuthUrl();
         $this->ocular->set_view_data("loginGpUrl", $loginGpUrl);
         //end google
-        $this->ocular->render('applicationNew');
+        $this->ocular->render('applicationBaseSearch');
     }
 
     public function callData($num) {
@@ -177,6 +187,73 @@ class Welcome extends MY_Controller {
         } else {
             return $listEvent;
         }
+    }
+
+    /**
+     * Description  Send email to job alert
+     * Author       Cuong.Chung
+     * Date         29.06.2015
+     */
+    public function sendJobAlert() {
+
+        $email = $this->input->post('email');
+        $keyword = $this->input->post('keyword');
+        $frequency = $this->input->post('frequency');
+        $salary = $this->input->post('salary');
+        if ($this->input->post('job_categories') != "")
+            $jobCategories = explode(",", $this->input->post('job_categories'));
+        else
+            $jobCategories = array();
+        $jobLevel = $this->input->post('job_level');
+        if ($this->input->post('job_locations') != "")
+            $jobLocation = explode(",", $this->input->post('job_locations'));
+        else
+            $jobLocation = array();
+
+
+        // call login api
+        $criteria = array('email' => $email, "keywords" => $keyword, "job_categories" => $jobCategories, "job_locations" => $jobLocation, 'min_salary' => $salary, "job_level" => $jobLevel, "frequency" => 3, "lang" => 1);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, API_JOB_ALERT);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($criteria, JSON_NUMERIC_CHECK));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(API_HEADER_CONTENT, API_HEADER_TYPE, API_HEADER_ACCEPT));
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT); //timeout in seconds
+        $results = curl_exec($ch);
+        $results = json_decode($results);
+
+        if ($results->meta->code == 200 && $results->data->createdStatus == 'SENT_EMAIL') {
+            echo 'true';
+        } else {
+// print to screen: login faile
+            echo 'false';
+        }
+    }
+
+    public function getUrlAlert() {
+        $keyword = $this->input->post('keyword');
+        $categories = @$this->input->post('job_categories');
+        $locations = @$this->input->post('job_locations');
+        $level = @$this->input->post("job_level");
+
+        $searchNEW = new MySearch();
+        if ($keyword)
+            $searchNEW->job_title .= ' ' . $keyword;
+        if ($categories)
+            $searchNEW->job_category = $categories;
+        if ($locations)
+            $searchNEW->job_location = $locations;
+
+
+        $searchNEW->job_level = $level;
+
+        $url = $this->getSearchUrl($searchNEW);
+
+        echo site_url($url);
     }
 
 }

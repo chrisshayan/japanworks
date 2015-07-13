@@ -1,22 +1,33 @@
-<div id="footer" align="center">
-    <a href="<?php echo base_url(); ?>">Về JapanWorks</a>&nbsp;&nbsp;&nbsp;
-    <a target='_blank' href="<?php echo(MAIN_SITE); ?>/lien-he">Liên hệ</a>&nbsp;&nbsp;&nbsp;
-    <a target='_blank' href="http://advice.vietnamworks.com/">Tin tức</a>&nbsp;&nbsp;&nbsp;
-    <a target='_blank' href="<?php echo(MAIN_SITE); ?>/tro-giup/viec-lam">Trợ giúp</a>&nbsp;&nbsp;&nbsp;<br>
-    <a href="<?php echo site_url("about/term"); ?>">Thỏa thuận sử dụng</a>&nbsp;&nbsp;&nbsp;
-    <a href="<?php echo site_url("about/privacy"); ?>">Quy định bảo mật</a> <br>
-    <br>
-    <p class="small copyright">Copyright © Công Ty Cổ Phần JapanWorks.</p>
+<div class="footer">
+    <div class="pright">
+        <a href="<?php echo base_url(); ?>">Về JapanWorks</a>&nbsp;&nbsp;&nbsp;
+        <a target='_blank' href="<?php echo(MAIN_SITE); ?>/lien-he">Liên hệ</a>&nbsp;&nbsp;&nbsp;
+        <a target='_blank' href="http://advice.vietnamworks.com/">Tin tức</a>&nbsp;&nbsp;&nbsp;
+        <a target='_blank' href="<?php echo(MAIN_SITE); ?>/tro-giup/viec-lam">Trợ giúp</a>&nbsp;&nbsp;&nbsp;
+        <br class="newline">
+        <a href="<?php echo site_url("about/term"); ?>">Thỏa thuận sử dụng</a>&nbsp;&nbsp;&nbsp;
+        <a href="<?php echo site_url("about/privacy"); ?>">Quy định bảo mật</a> <br>
+        <br>
+    </div>
+
+    <div><strong>Copyright</strong> © Công Ty Cổ Phần JapanWorks.</div>
 </div>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>static/cfp/js/jquery-ui-1.10.4.min.js"></script>
+<script src="<?php echo base_url(); ?>static/cfp/js/jquery-ui.custom.min.js"></script>
+<script src="<?php echo base_url(); ?>static/cfp/js/jquery-2.1.1.js"></script>
+<script src="<?php echo base_url(); ?>static/cfp/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>static/cfp/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="<?php echo base_url(); ?>static/cfp/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
 <script type="text/javascript" src="<?php echo base_url(); ?>static/js/modernizr.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/ui.plugins.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/owl.carousel.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.fancybox.pack.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/home.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/isotope.pkgd.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>static/js/imagesloaded.pkgd.min.js"></script>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/owl.carousel.min.js"  ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery.fancybox.pack.js" ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/home.js" ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/isotope.pkgd.js" ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>static/js/imagesloaded.pkgd.min.js" ></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>static/js/functions.js"></script>
 
 <?php
@@ -53,19 +64,27 @@ $jobLevelJson = json_encode($jobLevel);
 $keywords = json_encode(trim(str_replace(strtolower(KEYWORD_DEDAULT), '', $search->job_title)));
 ?>
 <script>
-    var keywords = <?php echo $keywords ?>;
+    var keywords = <?php echo $keywords; ?>;
     $("#keywordMainSearch").val(keywords);
-    var catSelectted = <?php echo $catsJson ?>;
+    var catSelectted = <?php echo $catsJson; ?>
+
     if (catSelectted) {
-        $("#cateListMainSearch_chosen .chosen-choices").prepend(catSelectted);
-        $("#cateListMainSearch_chosen .chosen-choices .search-field input").val("");
-        $("#cateListMainSearch_chosen .chosen-choices .search-field input").css("width", "25px");
+        var lis = $(catSelectted);
+        var cateSelect = $('#cateListMainSearch');
+        lis.each(function () {
+            cateSelect.find("option:contains(" + $(this).find('span').html() + ")").attr('selected', 'selected');
+        });
+        cateSelect.trigger('chosen:updated');
     }
     var locSelectted = <?php echo $locsJson ?>;
     if (locSelectted) {
-        $("#locationMainSearch_chosen .chosen-choices").prepend(locSelectted);
-        $("#locationMainSearch_chosen .chosen-choices .search-field input").val("");
-        $("#locationMainSearch_chosen .chosen-choices .search-field input").css("width", "25px");
+        var los = $(locSelectted);
+        var locSelect = $('#locationMainSearch');
+        los.each(function () {
+            locSelect.find("option:contains(" + $(this).find('span').html() + ")").attr('selected', 'selected');
+        });
+        locSelect.trigger('chosen:updated');
+
     }
     var jobLevel = <?php echo $jobLevelJson ?>;
     if (jobLevel) {
@@ -83,5 +102,11 @@ $keywords = json_encode(trim(str_replace(strtolower(KEYWORD_DEDAULT), '', $searc
         $('html,body').animate({scrollTop: aTag.offset().top}, 300);
     }
     $(function () {
+    });
+</script>
+
+<script>
+    $('.carousel').carousel({
+        interval: 3000
     });
 </script>

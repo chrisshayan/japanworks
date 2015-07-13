@@ -20,6 +20,7 @@ class Register extends MY_Controller {
         if (isset($_SERVER['HTTP_REFERER'])) {
             $link = $_SERVER['HTTP_REFERER'];
             if (strpos($link, base_url('register')) === false) {
+
                 $this->session->set_userdata('linkBackRegister', $link);
             }
         }
@@ -44,20 +45,11 @@ class Register extends MY_Controller {
             //load job with parametter job_title=nhat ban
             $urlRegister = API_REGISTER;
             $chRegister = curl_init();
-            /* old api
-             *
-              $postField = array(
-              "email" => $this->input->post('inputEmail3'), "password" => $this->input->post('inputPassword3'), "firstname" => $this->input->post('inputFirstName'),
-              "lastname" => $this->input->post('inputLastName'), "birthday" => "yyyy-mm-dd", "genderid" => "1", "countryid" => "1",
-              "cityid" => "29", "isaddnewletter" => $chkIsNewLetter, "isaddedmonthlynewsletter" => $chkIsNewLetter
-              );
-             */
-            // fix for new api 2015.2.4
             $postField = array(
-                'email' => $this->input->post('inputEmail3'),
-                'password' => $this->input->post('inputPassword3'),
-                'firstname' => $this->input->post('inputFirstName'),
-                'lastname' => $this->input->post('inputLastName'),
+                'email' => $this->input->post('email'),
+                'password' => $this->input->post('password'),
+                'firstname' => $this->input->post('firstname'),
+                'lastname' => $this->input->post('lastname'),
                 'lang' => 1 // Vietnamese
             );
 
@@ -75,10 +67,10 @@ class Register extends MY_Controller {
             curl_close($chRegister);
             $resultsRegister = json_decode($resultsRegister);
             if ($resultsRegister->meta->code == 200 && $resultsRegister->meta->message == 'Success') {// if result API success
-                $passwordHash = crypt($this->input->post('inputPassword3'), '$6$sal' . uniqid()); //crypt password
+                $passwordHash = crypt($this->input->post('password'), '$6$sal' . uniqid()); //crypt password
                 $dataToStore = array(
                     'uniid' => $resultsRegister->data->userID,
-                    'email' => $this->input->post('inputEmail3'),
+                    'email' => $this->input->post('email'),
                     "jplevel" => 0,
                     "categoryid" => 0,
                     "jobexperience" => 0,
@@ -96,15 +88,13 @@ class Register extends MY_Controller {
                     redirect('register/index');
                 } //end insert db
             } else {
-
-                $this->checkExistInJpwAndInsert($this->input->post('inputEmail3'), 0);
-
+                $this->checkExistInJpwAndInsert($this->input->post('email'), 0);
                 $messageError['message_error'] = true;
                 $this->ocular->set_view_data('messageError', $messageError);
                 $this->ocular->set_view_data('postField', $postField);
             }//end check API
         }
-        $this->ocular->render('emptyLayout');
+        $this->ocular->render('applicationBase');
     }
 
     public function checkEmailExist() {
@@ -119,14 +109,20 @@ class Register extends MY_Controller {
         }
         $socialName = $this->uri->segment(3);
 
-        $descriptionSuccessPage = '<div class="well well-success">
-                        Xin chúc mừng! Vui lòng kiểm tra email ngay bây giờ và làm theo hướng dẫn để kích hoạt tài khoản của bạn.<br><br>
-                        <div class="small">
+        $descriptionSuccessPage = '<div class="alert alert-success register_success">
+                        <h3>Xin chúc mừng! Vui lòng kiểm tra email ngay bây giờ và làm theo hướng dẫn để kích hoạt tài khoản của bạn.</h3><br>
+                        <br>
                             1. Kiểm tra Email kích hoạt trong Hộp thư đến (hoặc hòm thư Spam/Thư Rác).<br>
                             2. Click vào Nút kích hoạt trong Email và đăng nhập vào VietnamWorks (Kích hoạt hoàn thành).<br>
-                            3. Trở về JapanWorks và đăng nhập.<br>
-                        </div>
+                            3. Trở về JapanWorks và đăng nhập.
+
                     </div>';
+        $textExistNotActive = '<div class="alert alert-success register_success"><h3>Email của bạn đã tồn tại ở VietnamWorks nhưng vẫn chưa được kích hoạt.</h3><br> '
+                . ' Vui lòng tìm email kích hoạt của Vietnamwork và kích hoạt tài khoản của bạn trước </div>';
+        $textExist = '<div class="alert alert-success register_success"><h3>Email của bạn đã tồn tại ở VietnamWorks. </h3><br>'
+                . 'Bạn có thể bắt đầu đăng nhập bằng account của Vietnamwork từ <a href="' . base_url('login') . '">đây</a> hoặc bên dưới  </div>';
+        $textNew = '<div class="alert alert-success register_success"><h3>Vietnamworks/Japanworks đã gửi cho ban một email có chứa password. </h3><br>'
+                . ' Vui lòng sử dụng password đó và đăng nhập</div>';
         if ($socialName === "facebook") {
             //facebook -------
             $dataAccount = $this->session->userdata('data_facebook');
@@ -137,16 +133,16 @@ class Register extends MY_Controller {
                     //check and insert if user don't exist in JPW db
                     $this->checkExistInJpwAndInsert($dataAccount['email'], 1);
                     //end check
-                    $descriptionSuccessPage = '<div class="well well-success">Email của bạn đã tồn tại ở VietnamWorks nhưng vẫn chưa được kích hoạt. '
-                            . '<div class="small"> Vui lòng tìm email kích hoạt của Vietnamwork và kích hoạt tài khoản của bạn trước</div> </div>';
+                    $descriptionSuccessPage = $textExistNotActive;
                 } else if ($checkExist == "ACTIVATED") {
                     //check and insert if user don't exist in JPW db
                     $this->checkExistInJpwAndInsert($dataAccount['email'], 1);
                     //end check
-                    $descriptionSuccessPage = '<div class="well well-success">Email của bạn đã tồn tại ở VietnamWorks. '
-                            . '<div class="small"> Bạn có thể bắt đầu đăng nhập bằng account của Vietnamwork từ <a href="' . base_url('login') . '">đây</a> hoặc bên dưới </div> </div>';
+                    $descriptionSuccessPage = $textExist;
                 } else if ($checkExist == "NEW") {
-                    $this->registerAccountVNWAndJPW($dataAccount, 1);
+                    $this->registerAccountNotActive($dataAccount, 1);
+                    $titleSuccessPage = '';
+                    $descriptionSuccessPage = $textNew;
                 }
             }
         } else if ($socialName === "linkedin") {
@@ -159,17 +155,17 @@ class Register extends MY_Controller {
                     $this->checkExistInJpwAndInsert($dataAccount['email'], 3);
                     //end check
                     $titleSuccessPage = '';
-                    $descriptionSuccessPage = '<div class="well well-success">Email của bạn đã tồn tại ở VietnamWorks nhưng vẫn chưa được kích hoạt. '
-                            . '<div class="small"> Vui lòng tìm email kích hoạt của Vietnamwork và kích hoạt tài khoản của bạn trước</div> </div>';
+                    $descriptionSuccessPage = $textExistNotActive;
                 } else if ($checkExist == "ACTIVATED") {
                     //check and insert if user don't exist in JPW db
                     $this->checkExistInJpwAndInsert($dataAccount['email'], 3);
                     //end check
                     $titleSuccessPage = '';
-                    $descriptionSuccessPage = '<div class="well well-success">Email của bạn đã tồn tại ở VietnamWorks. '
-                            . '<div class="small"> Bạn có thể bắt đầu đăng nhập bằng account của Vietnamwork từ <a href="' . base_url('login') . '">đây</a> hoặc bên dưới </div> </div>';
+                    $descriptionSuccessPage = $textExist;
                 } else if ($checkExist == "NEW") {
-                    $this->registerAccountVNWAndJPW($dataAccount, 3);
+                    $this->registerAccountNotActive($dataAccount, 3);
+                    $titleSuccessPage = '';
+                    $descriptionSuccessPage = $textNew;
                 }
             }
         } else if ($socialName === "google") {
@@ -181,17 +177,17 @@ class Register extends MY_Controller {
                     $this->checkExistInJpwAndInsert($dataAccount['email'], 2);
                     //end check
                     $titleSuccessPage = '';
-                    $descriptionSuccessPage = '<div class="well well-success">Email của bạn đã tồn tại ở VietnamWorks nhưng vẫn chưa được kích hoạt. '
-                            . '<div class="small"> Vui lòng tìm email kích hoạt của Vietnamwork và kích hoạt tài khoản của bạn trước</div> </div>';
+                    $descriptionSuccessPage = $textExistNotActive;
                 } else if ($checkExist == "ACTIVATED") {
                     //check and insert if user don't exist in JPW db
                     $this->checkExistInJpwAndInsert($dataAccount['email'], 2);
                     //end check
                     $titleSuccessPage = '';
-                    $descriptionSuccessPage = '<div class="well well-success">Email của bạn đã tồn tại ở VietnamWorks. '
-                            . '<div class="small"> Bạn có thể bắt đầu đăng nhập bằng account của Vietnamwork từ <a href="' . base_url('login') . '">đây</a> hoặc bên dưới </div> </div>';
+                    $descriptionSuccessPage = $textExist;
                 } else if ($checkExist == "NEW") {
-                    $this->registerAccountVNWAndJPW($dataAccount, 2);
+                    $this->registerAccountNotActive($dataAccount, 2);
+                    $titleSuccessPage = '';
+                    $descriptionSuccessPage = $textNew;
                 }
             }
         }
@@ -205,16 +201,16 @@ class Register extends MY_Controller {
         $this->ocular->set_view_data("myData", $this->_myData);
         $this->ocular->set_view_data("msg", $msg);
 
-        $this->ocular->render('emptyLayout');
+        $this->ocular->render('applicationBase');
     }
 
     private function exeLogin() {
         $msg = '';
-        if ($_POST && isset($_POST['login'])) {
+        if ($this->input->post('isSent') == 'OK') {
             $this->_myData = $this->input->form();
 
-            $email = trim($this->_myData['inputEmail']);
-            $password = trim($this->_myData['inputPassword']);
+            $email = trim($this->_myData['email']);
+            $password = trim($this->_myData['password']);
 
             if ($email == '' || $password == '') {
                 return $this->lang->line('login_fail');
@@ -237,13 +233,18 @@ class Register extends MY_Controller {
 
             if ($results->meta->code == 200 && $results->meta->message == 'OK') {
                 // save to session
+                $results->data->coverletter = '';
                 $this->session->set_userdata('userInfo', $results->data);
                 $this->session->set_userdata('passwordUser', $password);
-
+                $this->session->set_userdata('checkLogin', 1);
                 if ($this->session->userdata('linkBackRegister')) {
-                    redirect($this->session->userdata('linkBackRegister'));
-                } else
+
+                    //  redirect($this->session->userdata('linkBackRegister'));
                     redirect('/');
+                } else {
+
+                    redirect('/');
+                }
             } else {
                 // print to screen: login faile
                 return $this->lang->line('login_fail');
@@ -331,6 +332,50 @@ class Register extends MY_Controller {
         $postField = array(
             'email' => trim($data['email']),
             'password' => randomPassword(),
+            'firstname' => trim($data['firstname']),
+            'lastname' => trim($data['lastname'])
+        );
+        curl_setopt($chRegister, CURLOPT_URL, $urlRegister);
+        curl_setopt($chRegister, CURLOPT_POST, 1);
+        curl_setopt($chRegister, CURLOPT_POSTFIELDS, json_encode($postField));
+        curl_setopt($chRegister, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($chRegister, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($chRegister, CURLOPT_HTTPHEADER, array(
+            API_HEADER_CONTENT, API_HEADER_TYPE, 'Accept: application/JSON'));
+        curl_setopt($chRegister, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($chRegister, CURLOPT_TIMEOUT, 36000); //timeout in seconds
+
+        $resultsRegister = curl_exec($chRegister);
+
+        curl_close($chRegister);
+        $resultsRegister = json_decode($resultsRegister);
+
+        if ($resultsRegister->meta->code == 200 && $resultsRegister->meta->message == 'Success') {// if result API success
+            $dataToStore = array(
+                'uniid' => $resultsRegister->data->userID,
+                'email' => $data['email'],
+                "jplevel" => 0,
+                "categoryid" => 0,
+                "jobexperience" => 0,
+                "social" => $socialId,
+                'actflg' => 1,
+                "createdate" => date("Y-m-d H:i:s"),
+                "updatedate" => date("Y-m-d H:i:s")
+            );
+            // $checkInsert = $this->users_model->registerSocialUser($dataToStore);
+            $checkInsert = $this->users_model->registerUserToData($dataToStore);
+            //if the insert has returned true then we send mail (if parametter 'test_send_mail' exist)
+        } else {
+            redirect('/');
+        }
+    }
+
+    private function registerAccountNotActive($data, $socialId) {
+        $urlRegister = API_REGISTER_WITHOUT_ACTIVE;
+        $chRegister = curl_init();
+        // echo $urlRegister;
+        $postField = array(
+            'email' => trim($data['email']),
             'firstname' => trim($data['firstname']),
             'lastname' => trim($data['lastname'])
         );

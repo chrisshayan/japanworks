@@ -12,11 +12,18 @@
         <meta name="Robots" content="index, follow">
         <meta name="format-detection" content="telephone=no">
 
+        <!-- cfp -->
+        <link href="<?php echo base_url("static/cfp/css/bootstrap.min.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/font-awesome/css/font-awesome.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/css/animate.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/css/style.css"); ?>" rel="stylesheet">
+
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="<?php echo base_url("static/css/bootstrap.min.css"); ?>">
+
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/search.css?201406161725"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/default.css?201406241331"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_cfp.css"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_grid.css?2014241300"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("static/css/jquery.fancybox.css?v=2.1.5"); ?>" type="text/css" media="screen" />
         <!-- Important Owl stylesheet -->
@@ -24,7 +31,6 @@
         <link rel="stylesheet" href="<?php echo base_url("static/css/owl.theme.css"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/font-awesome.min.css") ?>">
         <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.11.1.min.js"></script>
-        <script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></script>
 
         <?php if (ENVIRONMENT_REAL) { ?>
             <script>
@@ -59,122 +65,130 @@
         <?php } ?>
 
         <!-- heapanalytics -->
-        <script type="text/javascript">
-            window.heap = window.heap || [], heap.load = function (t, e) {
-                window.heap.appid = t, window.heap.config = e;
-                var a = document.createElement("script");
-                a.type = "text/javascript", a.async = !0, a.src = ("https:" === document.location.protocol ? "https:" : "http:") + "//cdn.heapanalytics.com/js/heap-" + t + ".js";
-                var n = document.getElementsByTagName("script")[0];
-                n.parentNode.insertBefore(a, n);
-                for (var o = function (t) {
-                    return function () {
-                        heap.push([t].concat(Array.prototype.slice.call(arguments, 0)))
-                    }
-                }, p = ["clearEventProperties", "identify", "setEventProperties", "track", "unsetEventProperty"], c = 0; c < p.length; c++)
-                    heap[p[c]] = o(p[c])
-            };
-            heap.load("1726761437");
-        </script>
+        <?php /*
+          <script type="text/javascript">
+          window.heap = window.heap || [], heap.load = function (t, e) {
+          window.heap.appid = t, window.heap.config = e;
+          var a = document.createElement("script");
+          a.type = "text/javascript", a.async = !0, a.src = ("https:" === document.location.protocol ? "https:" : "http:") + "//cdn.heapanalytics.com/js/heap-" + t + ".js";
+          var n = document.getElementsByTagName("script")[0];
+          n.parentNode.insertBefore(a, n);
+          for (var o = function (t) {
+          return function () {
+          heap.push([t].concat(Array.prototype.slice.call(arguments, 0)))
+          }
+          }, p = ["clearEventProperties", "identify", "setEventProperties", "track", "unsetEventProperty"], c = 0; c < p.length; c++)
+          heap[p[c]] = o(p[c])
+          };
+          heap.load("1726761437");
+          </script>
+         */ ?>
+
     </head>
 
 
-    <body id="" style="">
+    <body class="top-navigation">
         <div id="wrapper">
-            <!--footer-->
-            <a name="top" id="top"></a>
+            <div id="page-wrapper">
 
 
-            <?php $this->load->view("/layouts/_header"); ?>
-            <!--End head-->
-            <div class="container" id="section2">
-                <ol class="breadcrumb">
-                    <li><a href="<?php echo base_url(); ?>">Trang chủ</a></li>
-                    <li>Công Việc Dành Cho Người Mới Biết Tiếng Nhật</li>
-                </ol>
+                <?php $this->load->view("/layouts/_header");
+                ?>
+                <div class="wrapper wrapper-content">
+                    <!--End head-->
+                    <div class="container" id="section2">
+                        <ol class="breadcrumb">
+                            <li><a href="<?php echo base_url(); ?>">Trang chủ</a></li>
+                            <li><a href="<?php echo base_url('kw/'); ?>">Công việc tiếng Nhật</a></li>
+                            <li>Công Việc Dành Cho Người Mới Biết Tiếng Nhật</li>
+                        </ol>
 
 
-                <div class="row">
-                    <div class="col-sm-12 big_photo">
-                        <img src="<?php echo base_url("static/img/xalo/big_photo.jpg") ?>" class="img-responsive key-visual"  alt=""/>
-                    </div>
-                </div>
-            </div>
-            <div class="container" id="section2">
-                <div class="row">
-                    <div class="col-sm-9 left_side">
-
-                        <!--best jobs -->
-                        <div class="panel" id="content">
-                            <div class="panel-heading">
-                                <div class="panel-title">
-                                    <h2><span class="glyphicon glyphicon-thumbs-up"></span> Việc làm</h2>
-                                </div>
-                            </div>
-                            <div class="panel-body" id="results">
-
-                                <?php if (isset($data->jobs) && !empty($data->jobs)): ?>
-                                    <p class="mb10 search_msg"><strong>Tuyển dụng <span class="txtRed total"><?php echo $data->total; ?></span>  công việc cho người biết tiếng Nhật sơ cấp/không biết tiếng Nhật.</strong></p>
-                                    <?php
-                                    foreach ($data->jobs as $key => $job) {
-                                        $this->load->view("/benefit/_item", array("key" => $key, "job" => $job));
-                                    }
-                                    ?>
-
-                                    <div class="pagination-block" align="center">
-                                        <p>Hiển thị: <strong><?php echo $valueShowRecord; ?></strong> trong số <strong><?php echo $data->total; ?></strong> việc làm.</p>
-                                        <ul class="pagination">
-                                            <?php echo $this->pagination->create_links(); ?>
-                                        </ul>
-                                    </div>
-                                <?php else: ?>
-                                    <p class="mb10 search_msg"><strong><?php echo $this->lang->line("no_result"); ?></strong></p>
-                                <?php endif; ?>
-
+                        <div class="row">
+                            <div class="col-sm-12 big_photo">
+                                <img src="<?php echo base_url("static/img/xalo/big_photo.jpg") ?>" class="img-responsive key-visual"  alt=""/>
                             </div>
                         </div>
-
                     </div>
+                    <div class="container" id="section2">
+                        <div class="row">
+                            <div class="col-sm-9 left_side">
 
-                    <!-- PAGE RIGHT SIDE -->
-                    <div class="col-sm-3 right_side">
+                                <!--best jobs -->
+                                <div class="panel" id="content">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <h2><span class="glyphicon glyphicon-thumbs-up"></span> Việc làm</h2>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="results">
 
-                        <!-- Q&A -->
-                        <?php $this->load->view("/layouts/_homeQa"); ?>
+                                        <?php if (isset($data->jobs) && !empty($data->jobs)): ?>
+                                            <p class="mb10 search_msg"><strong>Tuyển dụng <span class="txtRed total"><?php echo $data->total; ?></span>  công việc cho người biết tiếng Nhật sơ cấp/không biết tiếng Nhật.</strong></p>
+                                            <?php
+                                            foreach ($data->jobs as $key => $job) {
+                                                $this->load->view("/xalo/_item", array("key" => $key, "job" => $job));
+                                            }
+                                            ?>
 
-                        <!-- end Q&A -->
+                                            <div class="pagination-block" align="center">
+                                                <p>Hiển thị: <strong><?php echo $valueShowRecord; ?></strong> trong số <strong><?php echo $data->total; ?></strong> việc làm.</p>
+                                                <ul class="pagination">
+                                                    <?php echo $this->pagination->create_links(); ?>
+                                                </ul>
+                                            </div>
+                                        <?php else: ?>
+                                            <p class="mb10 search_msg"><strong><?php echo $this->lang->line("no_result"); ?></strong></p>
+                                        <?php endif; ?>
 
-                        <!-- Event -->
-                        <?php $this->load->view("/layouts/_eventFb"); ?>
+                                    </div>
+                                </div>
 
-                        <!-- end Event -->
+                            </div>
+
+                            <!-- PAGE RIGHT SIDE -->
+                            <div class="col-sm-3 right_side">
+
+
+                                <!-- Event -->
+                                <?php $this->load->view("/layouts/_eventFb"); ?>
+
+                                <!-- end Event -->
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!--footer-->
+
+                <div class="footer">
+                    <div class="pright">
+                        <a href="<?php echo base_url(); ?>">Về JapanWorks</a>&nbsp;&nbsp;&nbsp;
+                        <a target='_blank' href="<?php echo(MAIN_SITE); ?>/lien-he">Liên hệ</a>&nbsp;&nbsp;&nbsp;
+                        <a target='_blank' href="http://advice.vietnamworks.com/">Tin tức</a>&nbsp;&nbsp;&nbsp;
+                        <a target='_blank' href="<?php echo(MAIN_SITE); ?>/tro-giup/viec-lam">Trợ giúp</a>&nbsp;&nbsp;&nbsp;
+                        <br class="newline">
+                        <a href="<?php echo site_url("about/term"); ?>">Thỏa thuận sử dụng</a>&nbsp;&nbsp;&nbsp;
+                        <a href="<?php echo site_url("about/privacy"); ?>">Quy định bảo mật</a> <br>
+                        <br>
+                    </div>
+
+                    <div><strong>Copyright</strong> © Công Ty Cổ Phần JapanWorks.</div>
+                </div>
+
             </div>
+        </div>
+    </body>
 
-            <!--footer-->
-            <div id="footer" align="center">
-                <a href="#">Về JapanWorks</a>&nbsp;&nbsp;&nbsp;
-                <a target="_blank" href="http://vietnamworks.com/lien-he">Liên hệ</a>&nbsp;&nbsp;&nbsp;
-                <a target="_blank" href="http://advice.vietnamworks.com/">Tin tức</a>&nbsp;&nbsp;&nbsp;
-                <a target="_blank" href="http://vietnamworks.com/tro-giup/viec-lam">Trợ giúp</a>&nbsp;&nbsp;&nbsp;
-                <br>
-                <a href="http://japan.vietnamworks.com/about/term">Thỏa thuận sử dụng</a>&nbsp;&nbsp;&nbsp;
-                <a href="http://japan.vietnamworks.com/about/privacy">Quy định bảo mật</a>
-                <br>
-                <br>
-                <p class="small copyright">Copyright © Công Ty Cổ Phần JapanWorks.</p>
-            </div>
+    <script type="text/javascript" src="<?php echo base_url("static/js/bootstrap.min.js") ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url("static/js/modernizr.js") ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url("static/js/ui.plugins.js") ?>"></script>
+    <script src="<?php echo base_url("static/js/jquery.mousewheel.min.js") ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url("static/js/owl.carousel.min.js") ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url("static/js/jquery.fancybox.pack.js") ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url("static/js/home.js") ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url("static/js/functions.js") ?>"></script>
 
-            <script type="text/javascript" src="<?php echo base_url("static/js/bootstrap.min.js") ?>"></script>
-            <script type="text/javascript" src="<?php echo base_url("static/js/modernizr.js") ?>"></script>
-            <script type="text/javascript" src="<?php echo base_url("static/js/ui.plugins.js") ?>"></script>
-            <script src="<?php echo base_url("static/js/jquery.mousewheel.min.js") ?>"></script>
-            <script type="text/javascript" src="<?php echo base_url("static/js/owl.carousel.min.js") ?>"></script>
-            <script type="text/javascript" src="<?php echo base_url("static/js/jquery.fancybox.pack.js") ?>"></script>
-            <script type="text/javascript" src="<?php echo base_url("static/js/home.js") ?>"></script>
-            <script type="text/javascript" src="<?php echo base_url("static/js/functions.js") ?>"></script>
-
-            <script>
+    <script>
             function scrollToAnchor(aid) {
                 var aTag = $("a[name='" + aid + "']");
                 $('html,body').animate({
@@ -183,11 +197,7 @@
             }
             $(function () {
             });
-            </script>
-            <!--End footer-->
-        </div>
-        <!-- //wrapper -->
+    </script>
+    <!--End footer-->
 
-
-    </body>
 </html>

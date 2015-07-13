@@ -10,6 +10,7 @@ class Login extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->lang->load('message', $this->_lang);
+        $this->load->helper('cookie');
     }
 
     function index() {
@@ -21,6 +22,7 @@ class Login extends MY_Controller {
         }
         $this->lang->load('message', $this->_lang);
         // if logon
+
         if (isset($this->_userInfo->login_token)) {
             redirect(site_url('/'));
         }
@@ -31,18 +33,16 @@ class Login extends MY_Controller {
         $this->_canonicalLink = site_url('login');
         $this->ocular->set_view_data("myData", $this->_myData);
         $this->ocular->set_view_data("msg", $msg);
-        $this->ocular->render('emptyLayout');
+        $this->ocular->render('applicationBase');
     }
 
     private function exeLogin() {
         $msg = '';
 
-
-        if ($_POST && isset($_POST['login'])) {
+        if ($this->input->post('isSent') == 'OK') {
             $this->_myData = $this->input->form();
-
-            $email = trim($this->_myData['inputEmail']);
-            $password = trim($this->_myData['inputPassword']);
+            $email = trim($this->_myData['email']);
+            $password = trim($this->_myData['password']);
 
             if ($email == '' || $password == '') {
                 return $this->lang->line('login_fail');
@@ -61,11 +61,16 @@ class Login extends MY_Controller {
             curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT); //timeout in seconds
 
             $results = curl_exec($ch);
+
             $results = json_decode($results);
+
 
             if ($results->meta->code == 200 && $results->meta->message == 'OK') {
                 // save to session
+                $results->data->coverletter = '';
                 $this->session->set_userdata('userInfo', $results->data);
+
+
                 $this->session->set_userdata('passwordUser', $password);
                 if ($this->session->userdata('linkBackLogin'))
                     redirect($this->session->userdata('linkBackLogin'));
@@ -105,11 +110,11 @@ class Login extends MY_Controller {
         if ($this->input->post()) {
             //validate form
 
-            $this->form_validation->set_rules('inputEmail', 'Vui lòng nhập email.', 'trim|required|callback_valid_for_email');
+            $this->form_validation->set_rules('email', 'Vui lòng nhập email.', 'trim|required|callback_valid_for_email');
 
 
             if ($this->form_validation->run()) {
-                $email = $this->input->post('inputEmail');
+                $email = trim($this->input->post('email'));
                 $url = API_REQUEST_PASSWORD . '/' . $email;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -133,11 +138,11 @@ class Login extends MY_Controller {
             }
         }
 
-        $this->ocular->render('emptyLayout');
+        $this->ocular->render('applicationBase');
     }
 
     public function forgotDone() {
-        $this->ocular->render('emptyLayout');
+        $this->ocular->render('applicationBase');
     }
 
 }

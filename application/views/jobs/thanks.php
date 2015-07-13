@@ -1,4 +1,3 @@
-
 <div class="col-sm-12">
     <div class="thanks">Xin chúc mừng! Hồ sơ ứng tuyển của bạn đã dược gửi thành công đến nhà tuyển dụng</div>
     <div id="similar">
@@ -8,10 +7,7 @@
         </div>
     </div>
 </div>
-</div>
 
-</div>
-</div>
 <div class="similar-content">
     <div class="container">
         <div class="row">
@@ -20,9 +16,7 @@
             if (isset($tempInfor)) {
                 $tempInfor = $this->session->userdata('tempInfor');
             } else
-                $tempInfor = "aaaaa";
-
-            //var_dump($tempInfor);
+                $tempInfor = "";
             ?>
 
             <?php if (isset($data->jobs) && !empty($data->jobs)): ?>
@@ -63,11 +57,21 @@
             <a href="<?php echo $linkSearch ?>"><div class="col-sm-3 back-btn">Trở lại</div></a>
         </div>
     </div>
+    <br/><br/>
+
+</div>
+<br/><br/>
+<style type="text/css">
 
 
 
-    <?php echo render_partial('/footer'); ?>
+    .top-navigation #page-wrapper{
+        min-height:500px;
+    }
+    .top-navigation .wrapper.wrapper-content.specsec{
+        padding:40px 0px 40px 0px !important;
+        margin-left:-15px !important;
+        margin-right:-15px !important;
+    }
 
-
-
-
+</style>

@@ -1,8 +1,11 @@
-<p align="center" class="ads_title">QUẢNG CÁO</p>
+<?php
+/*<p align="center" class="ads_title">QUẢNG CÁO</p>
 <div class="mb15 ads">
-    <a href="http://japan.vietnamworks.com/job/546823-japanese-interpreter-staff-2-persons-urgent/?utm_source=JPWsBanner&utm_medium=JBU&utm_campaign=Toto" target="_blank"><img src="<?php echo base_url("static/img/toto-banner.jpg"); ?>" width="100%" alt="">
+    <a href="http://jlit.evolable.asia/?utm_source=display&utm_medium=JAPANWORKSbanner&utm_campaign=JLIT" target="_blank"><img src="<?php echo base_url("static/img/JLIT_banner.jpg") ?>" width="100%" alt="">
     </a>
 </div>
+ */
+?>
 <?php
 /*
   <div class="row mb15">

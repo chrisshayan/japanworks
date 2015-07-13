@@ -23,7 +23,7 @@
                         $strLoc = "";
                         foreach ($this->_searchData->locations as $location) {
                             if (in_array($location->location_id, $locations)) {
-                                $strLoc .= $location->lang_en . ', ';
+                                $strLoc .= $location->lang_vn . ', ';
                             }
                         }
                         echo trim($strLoc, ", ");

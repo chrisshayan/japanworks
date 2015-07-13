@@ -1,6 +1,8 @@
-<div class="panel" id="hot_news">
+
+
+<div class="panel panel-default" id="hot_news">
     <div class="panel-heading">
-        <div class="panel-title"><h2><span class="glyphicon glyphicon-info-sign"></span> <?php echo $this->lang->line("job_info"); ?></h2></div>
+        <div class="panel-title"><span class="glyphicon glyphicon-info-sign"></span> <?php echo $this->lang->line("job_info"); ?></div>
     </div>
     <div class="panel-body">
 
@@ -112,4 +114,50 @@
 
 
     </div>
+
 </div>
+<!--them phan cong viec tuong tu-->
+
+<?php if (isset($dataSimilar->jobs) && !empty($dataSimilar->jobs)) { ?>
+
+    <div class="panel panel-default" id="similarjob">
+        <div class="panel-heading">
+            <div class="panel-title text-left">
+                Công việc tương tự
+            </div>
+        </div>
+        <div class="panel-body">
+            <?php
+            $i = 0;
+            foreach ($dataSimilar->jobs as $key => $job) {
+                ?>
+                <div class="row row_dotted">
+                    <div class="col-sm-12"><a href="<?php echo site_url(jobDetailUrl($job->job_id, $job->job_title)) . "/?utm_source=AlsoViewed&utm_medium=InternalLinks&utm_campaign=AlsoViewedJobTitle" ?>">
+                            <strong class="fs18 txtBlack"><?php
+                                if (strlen($job->job_title) > 70)
+                                    echo substr(($job->job_title), 0, 70) . "...";
+                                else
+                                    echo $job->job_title;
+                                ?></strong><br>
+                            <?php
+                            $locations = explode(",", $job->job_location);
+                            $strLoc = "";
+                            foreach ($this->_searchData->locations as $location) {
+                                if (in_array($location->location_id, $locations)) {
+                                    $strLoc .= $location->lang_vn . ', ';
+                                }
+                            }
+                            echo trim($strLoc, ", ");
+                            ?></a></div>
+                </div>
+                <?php
+                if (++$i == 10)
+                    break;
+            }
+            ?>
+
+
+        </div>
+    </div>
+<?php } ?>
+<!--ket thuc phan cong viec tuong tu-->

@@ -45,7 +45,12 @@ class Jobs extends MY_Controller {
             $this->_pageTitle = $job->data->job_detail->job_title;
             $this->_metaData = $job->data->job_detail->job_description;
 //set breadcrums
-            $this->breadcrumb->add($this->lang->line("breadcrumb_lv_0"), base_url());
+            $this->breadcrumb->add("Trang chủ", base_url());
+            if (($this->session->userdata("link_search")))
+                $this->breadcrumb->add($this->lang->line("breadcrumb_lv_0"), site_url($this->session->userdata("link_search")));
+            else
+                $this->breadcrumb->add($this->lang->line("breadcrumb_lv_0"), site_url('kw'));
+
             $this->breadcrumb->add($job->data->job_detail->job_title);
 //set url canonical
             if (isset($job->data->job_url->{$this->_lang})) {
@@ -59,29 +64,23 @@ class Jobs extends MY_Controller {
             $dataCV = $this->resumes_model->getInformationOfUser($this->_userInfo->email);
             $this->ocular->set_view_data('dataCV', $dataCV);
         }
-
-
+        $typeFile = "";
         // NEW CODE FOR APPLY FORM
         // 17-12-2014
-
         if ($this->input->post('isSent') == 'OK') {
-
 
             $this->load->library('form_validation');
             //check validate
-
-
 
             $emailLog = '';
             if (isset($this->_userInfo->login_token)) { // user login
                 $this->form_validation->set_rules('inputFirstName', 'please enter your first name.', 'trim|required');
                 $this->form_validation->set_rules('inputLastName', 'please enter your last name.', 'trim|required');
                 if ($this->form_validation->run() == TRUE) {
-                    if ($this->input->post('resumeApply') == "newAttachment") { //chose new CV
-                        $checkCase = 1;
+
+                    if ($this->input->post('resume-selector') == "defaultCV") { //online resume
                         $emailLog = $this->_userInfo->email;
-                        $linkFile = $this->uploadCvToServer($_FILES, $this->_userInfo->email);
-                        //array to put in API apply job
+                        $linkFile = FCPATH . $dataCV['linkresumeonline'];
                         $post = array(
                             'file_contents' => '@' . $linkFile,
                             'job_id' => $jobId,
@@ -93,21 +92,51 @@ class Jobs extends MY_Controller {
                             'last_name' => $this->_userInfo->last_name,
                             'lang' => '1'
                         );
+
+                        if ($this->input->post('langId') == "1") {
+                            $typeFile = "online_resume_EN";
+                        } else if ($this->input->post('langId') == "2") {
+                            $typeFile = "online_resume_JP";
+                        } else if ($this->input->post('langId') == "3") {
+                            $typeFile = "online_resume_VN";
+                        }
                     } else {
-                        $checkCase = 2;
-                        $emailLog = $this->_userInfo->email;
-                        $linkFile = FCPATH . $dataCV['linkresume'];
-                        $post = array(
-                            'file_contents' => '@' . $linkFile,
-                            'job_id' => $jobId,
-                            'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
-                            'cover_letter' => '',
-                            'email' => $this->_userInfo->email,
-                            'password' => $this->session->userdata('passwordUser'),
-                            'first_name' => $this->_userInfo->first_name,
-                            'last_name' => $this->_userInfo->last_name,
-                            'lang' => '1'
-                        );
+
+
+                        if ($this->input->post('resumeApply') == "newAttachment") { //chose new CV
+                            $checkCase = 1;
+                            $emailLog = $this->_userInfo->email;
+                            $linkFile = $this->uploadCvToServer($_FILES, $this->_userInfo->email);
+                            //array to put in API apply job
+                            $post = array(
+                                'file_contents' => '@' . $linkFile,
+                                'job_id' => $jobId,
+                                'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
+                                'cover_letter' => '',
+                                'email' => $this->_userInfo->email,
+                                'password' => $this->session->userdata('passwordUser'),
+                                'first_name' => $this->_userInfo->first_name,
+                                'last_name' => $this->_userInfo->last_name,
+                                'lang' => '1'
+                            );
+                            $typeFile = "attach_file"; //attachfile
+                        } else {
+                            $checkCase = 2;
+                            $emailLog = $this->_userInfo->email;
+                            $linkFile = FCPATH . $dataCV['linkresume'];
+                            $post = array(
+                                'file_contents' => '@' . $linkFile,
+                                'job_id' => $jobId,
+                                'application_subject' => 'Application for ' . $job->data->job_detail->job_title,
+                                'cover_letter' => '',
+                                'email' => $this->_userInfo->email,
+                                'password' => $this->session->userdata('passwordUser'),
+                                'first_name' => $this->_userInfo->first_name,
+                                'last_name' => $this->_userInfo->last_name,
+                                'lang' => '1'
+                            );
+                            $typeFile = "attach_resume"; //resume
+                        }
                     }
                 }
             } else { //user not login
@@ -142,6 +171,7 @@ class Jobs extends MY_Controller {
                         'lang' => '1'
                     );
                 }
+                $typeFile = "attach_file";
             }//check login
             //call API apply job
 
@@ -165,8 +195,19 @@ class Jobs extends MY_Controller {
                         "createdate" => date("Y-m-d H:i:s"),
                         "updatedate" => date("Y-m-d H:i:s")
                     );
+
                     $this->load->model('resumes_model');
-                    $this->resumes_model->updateInformationCV($dataToStore);
+                    $checkId = $this->resumes_model->getInformationOfUser($this->_userInfo->email);
+                    if (isset($checkId['id'])) {
+                        $dataUpdate = array(
+                            "nameresume" => $_FILES['inputFile']['name'],
+                            'linkresume' => "uploads/" . $emailStore . "/" . $_FILES['inputFile']['name'],
+                            "updatedate" => date("Y-m-d H:i:s")
+                        );
+                        $this->resumes_model->updateInformationCV($checkId['id'], $dataUpdate);
+                    } else {
+                        $this->resumes_model->insertInformationCV($dataToStore);
+                    }
                 }
                 //writelog CSV
                 if ($result->meta->code == 200 && $result->meta->message == 'Applied') {
@@ -179,6 +220,32 @@ class Jobs extends MY_Controller {
                     if ($this->input->post('checkActiveEmail') == 1) {
                         $textStatusEmail = "ACTIVATED";
                         $checkUser = 1;
+
+                        //auto login
+                        // call login api
+                        if (!isset($this->_userInfo->login_token)) {
+                            $criteria = array('user_email' => $post['email'], 'user_password' => $passWord);
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_URL, API_LOGIN);
+                            curl_setopt($ch, CURLOPT_POST, 1);
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($criteria));
+                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array(API_HEADER_CONTENT, API_HEADER_TYPE, API_HEADER_ACCEPT));
+                            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+                            curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT); //timeout in seconds
+
+                            $results = curl_exec($ch);
+                            $results = json_decode($results);
+
+                            if ($results->meta->code == 200 && $results->meta->message == 'OK') {
+                                // save to session
+                                $this->session->set_userdata('userInfo', $results->data);
+                                $this->session->set_userdata('userInfo', $results->data);
+                                $this->session->set_userdata('passwordUser', $passWord);
+                            }
+                        }
+                        //end login
                     } else
                     if ($this->input->post('checkActiveEmail') == 3) {
                         $textStatusEmail = "NON_ACTIVATED";
@@ -195,7 +262,7 @@ class Jobs extends MY_Controller {
                         $totalRecord = 1;
                         $checkFirst = 1;
                     }
-                    $dataLog = array($totalRecord, date("Y-m-d H:i:s"), $jobId, $job->data->job_company->company_name, $textStatusEmail, $emailLog);
+                    $dataLog = array($totalRecord, date("Y-m-d H:i:s"), $jobId, $job->data->job_company->company_name, $textStatusEmail, $emailLog, $typeFile);
                     writeLogCSV($dataLog, $checkFirst);
                 }
                 // $this->session->set_userdata("jobIdApplied", $jobId);
@@ -206,6 +273,33 @@ class Jobs extends MY_Controller {
                 redirect('jobs/error');
             }
         }
+
+        //get similar job
+
+        $criteria = array(
+            "job_title" => KEYWORD_DEDAULT,
+            "job_category" => $job->data->job_summary->job_category,
+            "job_location" => $job->data->job_summary->job_location,
+            "job_level" => 0,
+            "page_number" => 1
+        );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, API_SEARCH);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($criteria));
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            API_HEADER_CONTENT, API_HEADER_TYPE, 'Accept: application/JSON'));
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 36000); //timeout in seconds
+        $resSimilar = curl_exec($ch);
+        $resSimilar = json_decode($resSimilar);
+
+        $dataSimilar = $resSimilar->data;
+
+        $this->ocular->set_view_data("dataSimilar", $dataSimilar);
 
         $this->ocular->set_view_data("job", $job->data);
 
@@ -219,7 +313,8 @@ class Jobs extends MY_Controller {
             'fa-book', 'fa-laptop', 'fa-mobile', 'fa-plane', 'fa-glass',
             'fa-cab', 'fa-coffee', 'fa-gift', 'fa-child', 'fa-check-square-o');
         $this->ocular->set_view_data("benefitIcon", $benefitIcon);
-        $this->ocular->render('applicationNoRegister');
+
+        $this->ocular->render('applicationBase');
     }
 
     /**

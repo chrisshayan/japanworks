@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0028)http://www.vietnamworks.com/ -->
-<html lang="en" class="js canvas geolocation video audio localstorage sessionstorage texttrackapi track"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en" class="js canvas geolocation video audio localstorage sessionstorage texttrackapi track">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,15 +20,25 @@
         <meta property="og:title_name" content="<?php echo base_url() ?>">
         <meta property="og:description" content="<?php echo ($this->_metaData) ? $this->_metaData : $this->lang->line("meta_data") ?>">
         <link rel="canonical" href="<?php echo($this->_canonicalLink); ?>" />
-
+        <!-- cfp -->
+        <link href="<?php echo base_url("static/cfp/css/bootstrap.min.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/font-awesome/css/font-awesome.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/css/animate.css"); ?>" rel="stylesheet">
+        <link href="<?php echo base_url("static/cfp/css/style.css"); ?>" rel="stylesheet">
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="<?php echo base_url("static/css/bootstrap.min.css"); ?>">
+
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/search.css?201406161725"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/default.css?201406241331"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom.css"); ?>">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_cfp.css"); ?>">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url("static/css/custom_grid.css?2014241300"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("static/css/owl.theme.css"); ?>">
-        <script type="text/javascript" src="<?php echo base_url(); ?>static/js/jquery-1.11.1.min.js"></script>
+
+        <script src="<?php echo base_url(); ?>static/cfp/js/jquery-ui-1.10.4.min.js"></script>
+        <script src="<?php echo base_url(); ?>static/cfp/js/jquery-ui.custom.min.js"></script>
+        <script src="<?php echo base_url(); ?>static/cfp/js/jquery-2.1.1.js"></script>
+        <script src="<?php echo base_url(); ?>static/cfp/js/bootstrap.min.js"></script>
+
 
         <?php if (ENVIRONMENT_REAL) { ?>
             <script>
@@ -68,22 +79,23 @@
         <?php } ?>
     </head>
 
-    <body id="">
+    <body class="top-navigation">
         <div id="wrapper">
-            <!--header-->
-            <?php echo render_partial('/header'); ?>
-            <!--End header-->
-
-            <div class="container" id="section2">
-                <div class="row">
-                    <?php echo $this->ocular->yield(); ?>
+            <div id="page-wrapper">
+                <!--header-->
+                <?php echo render_partial('/header'); ?>
+                <!--End header-->
+                <div class="wrapper wrapper-content">
+                    <div class="container" id="section2">
+                        <div class="row">
+                            <?php echo $this->ocular->yield(); ?>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!--footer-->
-            <?php echo render_partial('/footer'); ?>
-            <!--End footer-->
-        </div>
+                <!--footer-->
+                <?php echo render_partial('/footerEmtyLayout'); ?>
+                <!--End footer-->
+            </div></div>
         <!-- //wrapper -->
     </body>
 </html>
